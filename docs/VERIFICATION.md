@@ -2,8 +2,8 @@
 
 ## Current evidence (2026-11-02)
 - Repository existence and initial main README: verified via GitHub.
-- Feature branch and source creation: check GitHub PR diff and head after write.
-- GitHub Actions static script: **not yet proven passed**.
+- GitHub draft PR #1 source foundation: **verified** at commit `2818276deb72b7b0323425da4319df6dc53fc2df`; all 17 changed paths read back from GitHub.
+- GitHub Actions `Source structure sanity`: **PASS at the above commit**, run ID `41557541809`. This is only repository structure/manifest checking, **not** Unreal compilation. Subsequent commits require their own status verification.
 - Unreal Engine 5.8.4 C++ build: **not run / unverified**.
 - Unreal native automation test: **not run / unverified**.
 - Editor launch, imports, maps, screenshots, physics and performance: **not run / unverified**.
