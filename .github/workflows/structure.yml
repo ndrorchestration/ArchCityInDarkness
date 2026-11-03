@@ -1,0 +1,19 @@
+name: Source structure sanity
+on:
+  push:
+    branches: ["foundation/**"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  structure:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify manifest and required sources (not Unreal compilation)
+        run: python tools/check_project_structure.py
