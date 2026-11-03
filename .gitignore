@@ -1,0 +1,23 @@
+# Unreal-generated outputs (do not ignore authored Content/*.uasset)
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+.vs/
+.idea/
+.vscode/
+*.sln
+*.suo
+*.VC.db
+*.VC.opendb
+*.opensdf
+*.sdf
+*.xcodeproj
+*.xcworkspace
+*.DS_Store
+Thumbs.db
+
+# Local test artifacts
+__pycache__/
+.pytest_cache/
+*.pyc
