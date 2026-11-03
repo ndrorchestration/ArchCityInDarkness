@@ -20,6 +20,11 @@ REQUIRED = [
     "docs/VERTICAL_SLICE.md",
     "docs/TECHNICAL_ARCHITECTURE.md",
     "docs/VERIFICATION.md",
+    "docs/NATIVE_VERIFICATION_RUNBOOK.md",
+    "docs/FIRST_SCENE.md",
+    "tools/Verify-UnrealNative.ps1",
+    "tools/verify_automation_report.py",
+    "tools/tests/test_verify_automation_report.py",
 ]
 missing = [str(f) for f in REQUIRED if not (ROOT / f).is_file()]
 assert not missing, f"Missing required files: {missing}"

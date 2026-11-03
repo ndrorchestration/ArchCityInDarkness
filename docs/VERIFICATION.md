@@ -15,6 +15,11 @@ python tools/check_project_structure.py
 ```
 Passing this checks only repository shape and parseability, not engine compilation.
 
+## Native verification helper and proof requirements
+- Source-only validation workflow with nine report-parser fixture tests: **PASS** at commit `23feea1326109d2b537510f3a36d017f0795a57c` (GitHub Actions run `41559005023`). This does **NOT** verify Unreal compilation or automation execution.
+- For exact Windows commands, artifact locations, and fail-closed proof rules, see [Native verification runbook](NATIVE_VERIFICATION_RUNBOOK.md).
+- The fictional first-scene proposal is [The Unclaimed Hour](FIRST_SCENE.md), NOT approved canon and NOT implemented.
+
 ## Windows Unreal review gate (later, exact path machine-dependent)
 1. Open `ArchCityInDarkness.uproject` in installed Unreal Engine 5.8.4.
 2. Generate project files if prompted; use matching VS/MSVC build tools.

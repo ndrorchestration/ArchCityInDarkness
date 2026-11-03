@@ -13,6 +13,8 @@ Explore a compact nighttime neighborhood, interact with original NPCs, manage hu
 - [Vertical slice / definition of done](docs/VERTICAL_SLICE.md)
 - [Technical architecture](docs/TECHNICAL_ARCHITECTURE.md)
 - [Verification plan](docs/VERIFICATION.md)
+- [Native Windows verification runbook](docs/NATIVE_VERIFICATION_RUNBOOK.md)
+- [Original first-scene proposal (not canon)](docs/FIRST_SCENE.md)
 
 ## Current source foundation
 

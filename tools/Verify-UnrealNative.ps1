@@ -54,12 +54,12 @@ try {
     if ($BuildExit -ne 0) { throw "Build.bat returned $BuildExit" }
     $Summary.build = 'PASS'
     $Summary.test = 'STARTED'
-    $Args = @(
+    $EditorArgs = @(
         $Project, '-unattended', '-nop4', '-nosplash', '-NoSound', '-NullRHI',
         "-ReportExportPath=$Report", '-ExecCmds=Automation RunTest ArchCityInDarkness.Survival.Hunger.Contract;Quit',
         "-abslog=$EditorLog"
     )
-    & $Editor @Args 2>&1 | Tee-Object -FilePath $EditorStdout
+    & $Editor @EditorArgs 2>&1 | Tee-Object -FilePath $EditorStdout
     $EditorExit = $LASTEXITCODE
     if ($EditorExit -ne 0) { throw "UnrealEditor-Cmd returned $EditorExit" }
     & $PythonExecutable $Verifier '--report' (Join-Path $Report 'index.json') '--log' $EditorLog
