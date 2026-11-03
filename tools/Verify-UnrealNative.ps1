@@ -45,9 +45,18 @@ $Summary = [ordered]@{
     build = 'NOT_RUN'
     test = 'NOT_RUN'
     outcome = 'FAIL_CLOSED'
+    blocker = $null
     error = $null
 }
 try {
+    # External UnrealBuildTool compilation cannot proceed while Live Coding is attached.
+    # Never terminate editors or Live Coding automatically: they can contain unsaved work.
+    $BlockingProcesses = @(Get-Process -Name UnrealEditor,LiveCodingConsole -ErrorAction SilentlyContinue)
+    if ($BlockingProcesses.Count -gt 0) {
+        $Summary.blocker = 'ACTIVE_EDITOR_OR_LIVE_CODING'
+        $Names = ($BlockingProcesses | ForEach-Object { "$($_.ProcessName) (PID $($_.Id))" }) -join ', '
+        throw "Unsafe to start external Unreal build while $Names is running. Save work and close Unreal Editor normally; no processes were terminated."
+    }
     $Summary.build = 'STARTED'
     & $Build 'ArchCityInDarknessEditor' 'Win64' 'Development' $Project '-WaitMutex' '-NoHotReload' 2>&1 | Tee-Object -FilePath $BuildLog
     $BuildExit = $LASTEXITCODE

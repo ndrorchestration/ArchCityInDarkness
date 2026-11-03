@@ -18,6 +18,8 @@ python -m unittest discover -s tools/tests -p 'test_*.py' -v
 pwsh -NoProfile -File tools/Verify-UnrealNative.ps1 -EngineRoot "C:\Program Files\Epic Games\UE_5.8"
 ~~~
 
+The script first checks for active Unreal Editor or Live Coding processes. If either is present, it fails closed with a saved summary and **does not terminate any process, run a build, or disturb unsaved work**. Save and close the Editor normally before rerunning. This conservative guard may also detect an Editor opened for another project.
+
 The script checks Engine/Build/Build.version, compiles ArchCityInDarknessEditor for Win64 Development, and runs the exact test ArchCityInDarkness.Survival.Hunger.Contract via UnrealEditor-Cmd. It creates a separate ignored Saved/ArchCityVerification/ run directory with build/editor logs, the Unreal JSON test report, and a summary.
 
 **PASS** requires successful native compile and Editor process exit, exactly one named test in index.json with state Success, zero failed/notRun counts, and the matching successful completion event plus TEST COMPLETE exit-code-0 marker in native logs. Missing or contradictory evidence is **FAIL_CLOSED**, even if process exit is zero.
