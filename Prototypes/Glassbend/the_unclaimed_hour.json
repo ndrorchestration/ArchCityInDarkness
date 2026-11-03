@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "status": "PROTOTYPE_NOT_CANON",
+  "quest_id": "the_unclaimed_hour",
+  "title": "The Unclaimed Hour",
+  "setting": "Glassbend (fictional riverside block, Columbus-inspired)",
+  "phases": [
+    "NotStarted",
+    "Investigating",
+    "Resolved"
+  ],
+  "initial_phase": "Investigating",
+  "terminal_phase": "Resolved",
+  "actors": [
+    {
+      "id": "mara_vale",
+      "role": "night archivist",
+      "scene_node": "NPC_MaraVale"
+    },
+    {
+      "id": "nico_bell",
+      "role": "bicycle courier",
+      "scene_node": "NPC_NicoBell"
+    },
+    {
+      "id": "etta_quill",
+      "role": "transit annex manager",
+      "scene_node": "NPC_EttaQuill"
+    }
+  ],
+  "clues": [
+    {
+      "id": "shift_receipt",
+      "acquisition": "Inspect the unattended pay envelope at the sheltered bench",
+      "requires": []
+    },
+    {
+      "id": "ledger_gap",
+      "acquisition": "Ask Mara about the discrepancy without disclosing private personnel data",
+      "requires": []
+    },
+    {
+      "id": "route_note",
+      "acquisition": "Ask Nico about the unofficial transfer route",
+      "requires": []
+    },
+    {
+      "id": "annex_badge",
+      "acquisition": "Notice a discarded annex visitor badge near the side entrance",
+      "requires": []
+    }
+  ],
+  "routes": [
+    {
+      "id": "dialogue",
+      "requires": [
+        "shift_receipt",
+        "ledger_gap"
+      ],
+      "method": "Persuade Mara to share a redacted shift ledger",
+      "evidence": "redacted_shift_log",
+      "trust_delta": 1,
+      "exposure_delta": 0,
+      "hunger_delta": 0,
+      "requires_violence": false,
+      "forced_feeding": false
+    },
+    {
+      "id": "stealth",
+      "requires": [
+        "route_note"
+      ],
+      "method": "Observe the transfer drop and photograph the misplaced timecard",
+      "evidence": "timecard_photo",
+      "trust_delta": 0,
+      "exposure_delta": 12,
+      "hunger_delta": 0,
+      "requires_violence": false,
+      "forced_feeding": false
+    },
+    {
+      "id": "confrontation",
+      "requires": [
+        "annex_badge"
+      ],
+      "method": "Confront private security; obtain a discarded register without lethal force",
+      "evidence": "discarded_register",
+      "trust_delta": -1,
+      "exposure_delta": 25,
+      "hunger_delta": 0,
+      "requires_violence": false,
+      "forced_feeding": false
+    }
+  ],
+  "constraints": {
+    "all_routes_nonlethal": true,
+    "no_required_feeding": true,
+    "repeated_resolution": "NO_OP",
+    "failure_allows_retry": true
+  }
+}
