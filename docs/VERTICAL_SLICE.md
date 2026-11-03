@@ -10,6 +10,8 @@ One original, compact fictional riverfront block in nighttime Columbus. The play
 - Reusable prototype hunger component with simple, testable constraints.
 - Native automation test written but not yet executed.
 - Project brief, originality rules, verification checklist.
+- Provisional [Glassbend quest JSON](../Prototypes/Glassbend/the_unclaimed_hour.json) with three alternatives, and 9 portable quest-contract tests; design verification only, **not** Unreal gameplay.
+- A concrete [Glassbend greybox plan](GLASSBEND_GREYBOX_PLAN.md) for implementation after native verification.
 No maps, character meshes, animations, NPCs, narrative assets or production art.
 
 **M001-B — native gate:**

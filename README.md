@@ -15,12 +15,14 @@ Explore a compact nighttime neighborhood, interact with original NPCs, manage hu
 - [Verification plan](docs/VERIFICATION.md)
 - [Native Windows verification runbook](docs/NATIVE_VERIFICATION_RUNBOOK.md)
 - [Original first-scene proposal (not canon)](docs/FIRST_SCENE.md)
+- [Glassbend level blockout plan](docs/GLASSBEND_GREYBOX_PLAN.md)
+- [Source-only quest data contract](Prototypes/Glassbend/the_unclaimed_hour.json)
 
 ## Current source foundation
 
 The repository includes a minimal Unreal C++ project descriptor, build targets, a deterministic hunger component, and an Unreal automation-test *source file*. This is **not** evidence of a successfully generated project, compiled module, executed Unreal test, rendered environment, or playable experience.
 
-The GitHub Actions check validates repository structure and JSON only; it **does not launch Unreal**. Native 5.8.4 Windows verification is a separate gate.
+The GitHub Actions check validates repository structure and portable quest/report-validator tests only; it **does not launch Unreal**. Native 5.8.4 Windows verification is a separate gate.
 
 ## Production rules
 
