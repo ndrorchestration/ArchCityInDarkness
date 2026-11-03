@@ -7,7 +7,7 @@
 - `DiscoverClue(FName)` accepts only four known clues and rejects duplicates, unrecognized clues, and discovery after resolution.
 - `TryResolve(EACIDResolutionRoute)` implements **exactly three** independent choices: Dialogue, Stealth, Confrontation. Missing prerequisites reject without mutating state; completed decisions cannot be rewritten.
 - `FACIDQuestSnapshot` exports the state in stable clue order. `TryRestoreSnapshot` validates schema, evidence, route, clue uniqueness, trust and exposure, and only accepts a snapshot on a pristine component. This is **a serialization data boundary, not a working SaveGame file system**.
-- Unreal Editor automation test source `ArchCityInDarkness.Quest.Glassbend.Contract` tests route prerequisites, duplicates, idempotence, and snapshot rejection.
+- Unreal Editor automation test source `ArchCityInDarkness.Quest.Glassbend.Contract` covers route prerequisites, duplicate clues, evidence distinctions, choice idempotence, in-progress resume, and explicit rejection of tampered snapshots (schema, clue, route evidence and trust). These assertions are *written*, not yet executed in Unreal.
 - Narrative character names and route choices remain noncanonical concept work; original historical roleplay correspondence is not in this repository.
 
 ## Route mapping (original prototype)

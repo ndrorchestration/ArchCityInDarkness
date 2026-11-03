@@ -89,6 +89,9 @@ public:
     EACIDResolutionRoute GetRoute() const { return Route; }
 
     UFUNCTION(BlueprintPure, Category="Quest")
+    FName GetEvidenceId() const { return EvidenceId; }
+
+    UFUNCTION(BlueprintPure, Category="Quest")
     int32 GetMaraTrust() const { return MaraTrust; }
 
     UFUNCTION(BlueprintPure, Category="Quest")
