@@ -25,6 +25,10 @@ REQUIRED = [
     "tools/Verify-UnrealNative.ps1",
     "tools/verify_automation_report.py",
     "tools/tests/test_verify_automation_report.py",
+    "Source/ArchCityInDarkness/Public/ACIDQuestLedgerComponent.h",
+    "Source/ArchCityInDarkness/Private/ACIDQuestLedgerComponent.cpp",
+    "Source/ArchCityInDarkness/Private/Tests/ACIDQuestLedgerComponentTests.cpp",
+    "docs/QUEST_LEDGER_SOURCE_PROTOTYPE.md",
 ]
 missing = [str(f) for f in REQUIRED if not (ROOT / f).is_file()]
 assert not missing, f"Missing required files: {missing}"
@@ -40,4 +44,16 @@ assert "OnHungerChanged" in header
 assert "IMPLEMENT_SIMPLE_AUTOMATION_TEST" in test_source
 assert "ArchCityInDarkness.Survival.Hunger.Contract" in test_source
 
-print("PASS: manifest, expected files, hunger test registration (static only; Unreal unverified)")
+quest_header = (ROOT / "Source/ArchCityInDarkness/Public/ACIDQuestLedgerComponent.h").read_text(encoding="utf-8")
+quest_source = (ROOT / "Source/ArchCityInDarkness/Private/ACIDQuestLedgerComponent.cpp").read_text(encoding="utf-8")
+quest_tests = (ROOT / "Source/ArchCityInDarkness/Private/Tests/ACIDQuestLedgerComponentTests.cpp").read_text(encoding="utf-8")
+contract = json.loads((ROOT / "Prototypes/Glassbend/the_unclaimed_hour.json").read_text(encoding="utf-8"))
+for clue in contract["clues"]:
+    assert f'TEXT("{clue["id"]}")' in quest_source, f"Clue source drift: {clue['id']}"
+for route in contract["routes"]:
+    assert f'TEXT("{route["evidence"]}")' in quest_source, f"Evidence source drift: {route['id']}"
+    assert route["id"].capitalize() in quest_header, f"Route enum drift: {route['id']}"
+assert "TryRestoreSnapshot" in quest_header and "ValidateSnapshot" in quest_source
+assert "ArchCityInDarkness.Quest.Glassbend.Contract" in quest_tests
+
+print("PASS: manifest, expected sources, prototype quest string/enum consistency (static only; Unreal unverified)")
