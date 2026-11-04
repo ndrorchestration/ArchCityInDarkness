@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 from validate_glassbend_layout import LAYOUT_PATH, QUEST_PATH, load_json, validate_layout
 from validate_interaction_bindings import BINDINGS_PATH, BRIDGE_CPP_PATH, load as load_bindings, validate_bindings
+from validate_dialogue_contract import DIALOGUE_PATH, load as load_dialogue, validate_dialogue
 
 ROOT = Path(__file__).resolve().parents[1]
 REQUIRED = [
@@ -42,6 +43,10 @@ REQUIRED = [
     "tools/validate_interaction_bindings.py",
     "tools/tests/test_interaction_bindings.py",
     "docs/GLASSBEND_INTERACTION_BRIDGE.md",
+    "Prototypes/Glassbend/dialogue_v1.json",
+    "tools/validate_dialogue_contract.py",
+    "tools/tests/test_dialogue_contract.py",
+    "docs/GLASSBEND_DIALOGUE_CONTRACT.md",
 ]
 missing = [str(f) for f in REQUIRED if not (ROOT / f).is_file()]
 assert not missing, f"Missing required files: {missing}"
@@ -81,4 +86,10 @@ assert not binding_problems, "Source-only action bridge drift: " + "; ".join(bin
 interaction_test = (ROOT / "Source/ArchCityInDarkness/Private/Tests/ACIDQuestInteractionBridgeTests.cpp").read_text(encoding="utf-8")
 assert "ArchCityInDarkness.Interaction.Glassbend.Contract" in interaction_test
 assert "TryApplyAction" in (ROOT / "Source/ArchCityInDarkness/Public/ACIDQuestInteractionBridge.h").read_text(encoding="utf-8")
-print("PASS: manifest, quest, layout and interaction bridge parity (source-only, Unreal unverified)")
+dialogue_problems = validate_dialogue(
+    load_dialogue(DIALOGUE_PATH), load_bindings(BINDINGS_PATH),
+    load_json(QUEST_PATH), load_json(LAYOUT_PATH),
+)
+assert not dialogue_problems, "Source-only dialogue/interaction drift: " + "; ".join(dialogue_problems)
+
+print("PASS: manifest, quest, layout, interaction and original dialogue parity (source only; Unreal unverified)")
