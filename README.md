@@ -19,6 +19,7 @@ Explore a compact nighttime neighborhood, interact with original NPCs, manage hu
 - [Source-only quest data contract](Prototypes/Glassbend/the_unclaimed_hour.json)
 - [M002 quest ledger C++ source candidate](docs/QUEST_LEDGER_SOURCE_PROTOTYPE.md) — stacked review branch; native unverified
 - [M003 Glassbend spatial/camera marker prototype](docs/GLASSBEND_LAYOUT_CONTRACT.md) — further stacked source-only proposal; no Unreal map or rendering
+- [M004 Glassbend interaction bridge](docs/GLASSBEND_INTERACTION_BRIDGE.md) — explicit action-to-quest C++ adapter and portable contract tests; no player proximity/input or native compile verified
 
 ## Current source foundation
 
