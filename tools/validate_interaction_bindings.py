@@ -59,7 +59,9 @@ def validate_bindings(bindings: dict, quest: dict, layout: dict, cpp: str) -> li
     if not isinstance(actions, list) or any(not isinstance(a, dict) for a in actions):
         return errors + ["Action list must contain objects"]
     names = [a.get("id") for a in actions]
-    if len(names) != len(EXPECTED) or len(set(map(str, names))) != len(names) or (
+    if any(not isinstance(name, str) for name in names):
+        return errors + ["All action IDs must be strings"]
+    if len(names) != len(EXPECTED) or len(set(names)) != len(names) or (
         set(names) != set(EXPECTED)
     ):
         errors.append("Action IDs missing, duplicated or unexpected")
@@ -128,6 +130,10 @@ def validate_bindings(bindings: dict, quest: dict, layout: dict, cpp: str) -> li
             errors.append(f"C++ dispatch drift for {action_id}")
     if "return false;" not in cpp or "IsValid(QuestLedger)" not in cpp:
         errors.append("C++ bridge must reject invalid inputs")
+    # A source-only guard against directly coupling player actions to feeding mechanics.
+    # This is a text-level check, not a proof of runtime call-graph purity.
+    if any(token in cpp for token in ("HungerComponent", "->Feed(", "->AccrueHunger(", "->SetHunger(")):
+        errors.append("Interaction bridge must not directly mutate hunger")
     return errors
 
 
