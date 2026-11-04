@@ -85,6 +85,17 @@ class GlassbendBindingContract(unittest.TestCase):
         )
         self.assertTrue(self.validate())
 
+    def test_malformed_nonstring_action_id_rejected(self):
+        self.bindings["actions"][0]["id"] = {"not": "an identifier"}
+        self.assertTrue(self.validate())
+
+    def test_direct_hunger_mutation_rejected(self):
+        self.cpp = self.cpp.replace(
+            'return false;\n}',
+            'QuestLedger->Feed(10);\n    return false;\n}', 1,
+        )
+        self.assertTrue(self.validate())
+
     def test_cpp_duplicate_dispatch_rejected(self):
         start = self.cpp.index('    if (ActionId == FName(TEXT("inspect_receipt")))')
         end = self.cpp.index('    if (ActionId == FName(TEXT("ask_mara_about_ledger")))')
