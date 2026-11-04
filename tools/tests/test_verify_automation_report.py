@@ -7,6 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from verify_automation_report import TEST, verify
 
 QUEST = "ArchCityInDarkness.Quest.Glassbend.Contract"
+INTERACTION = "ArchCityInDarkness.Interaction.Glassbend.Contract"
 
 
 class Contract(unittest.TestCase):
@@ -92,6 +93,19 @@ class Contract(unittest.TestCase):
         self.text = self.text.replace(TEST, QUEST)
         self.write()
         self.assertTrue(verify(self.report, self.log, expected=QUEST))
+
+    def test_interaction_named_success(self):
+        self.data["tests"][0]["fullTestPath"] = INTERACTION
+        self.text = self.text.replace(TEST, INTERACTION)
+        self.write()
+        self.assertEqual(verify(self.report, self.log, expected=INTERACTION), [])
+
+    def test_interaction_report_cannot_be_quest(self):
+        self.data["tests"][0]["fullTestPath"] = QUEST
+        self.text = self.text.replace(TEST, INTERACTION)
+        self.write()
+        self.assertTrue(verify(self.report, self.log, expected=INTERACTION))
+
 
 
 if __name__ == "__main__":

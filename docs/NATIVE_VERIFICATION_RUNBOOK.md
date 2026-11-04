@@ -32,6 +32,17 @@ The script checks Engine/Build/Build.version and compiles ArchCityInDarknessEdit
 
 The script compiles once, then launches a distinct UnrealEditor-Cmd process for each requested contract. The reports are separated under `AutomationReport/Hunger` and `AutomationReport/Quest`; each has a matching `Editor-Hunger.log` or `Editor-Quest.log`. `summary.json` records the exact Git head, requested tests, per-test results, and overall fail-closed outcome. It is not acceptable to use a portable test, an old report, a different branch, or a test of one contract to substantiate the other. Any failed test blocks an overall PASS.
 
+**M004 only, after M001-B and M002 have separately passed native verification and M003 scene direction has received creator review:** use a clean, isolated checkout of the staged M004 branch, and run all three exact tests with independent reports:
+
+~~~powershell
+& .\\tools\\Verify-UnrealNative.ps1 -EngineRoot 'C:\\Program Files\\Epic Games\\UE_5.8' -Tests `
+    'ArchCityInDarkness.Survival.Hunger.Contract', `
+    'ArchCityInDarkness.Quest.Glassbend.Contract', `
+    'ArchCityInDarkness.Interaction.Glassbend.Contract'
+~~~
+
+The M004 runner permits the exact third name, and stores its report and log as `AutomationReport/Interaction/index.json` and `Editor-Interaction.log`. The runner still defaults to the hunger contract, and must not be used to claim M001/M002 passed on their historical review heads. Source-only AST or Python successes are never native Unreal tests.
+
 **PASS** requires successful native compile and Editor process exit, exactly one named test in index.json with state Success, zero failed/notRun counts, and the matching successful completion event plus TEST COMPLETE exit-code-0 marker in native logs. Missing or contradictory evidence is **FAIL_CLOSED**, even if process exit is zero.
 
 The runner does not install software, alter other repositories, merge PRs, create maps, package games, or promote assets. Review evidence and remove personal local paths before sharing in the public GitHub PR. If native verification fails, keep the relevant draft PR open and document the failed gate in issue #2 (hunger) or issue #5 (quest). Never force-close user Editor processes.

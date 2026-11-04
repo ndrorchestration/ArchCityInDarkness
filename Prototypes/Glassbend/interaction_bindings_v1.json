@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "status": "PROTOTYPE_NOT_CANON",
+  "quest_id": "the_unclaimed_hour",
+  "layout_id": "glassbend_greybox_v1",
+  "world_interaction_gate": "NOT_IMPLEMENTED",
+  "interaction_model": "EXPLICIT_ACTION_IDS_ONLY",
+  "actions": [
+    {
+      "id": "inspect_receipt",
+      "kind": "discover_clue",
+      "clue_id": "shift_receipt",
+      "anchor_kind": "clue_spawn",
+      "anchor_id": "shift_receipt"
+    },
+    {
+      "id": "ask_mara_about_ledger",
+      "kind": "discover_clue",
+      "clue_id": "ledger_gap",
+      "anchor_kind": "npc",
+      "anchor_id": "mara_vale"
+    },
+    {
+      "id": "ask_nico_about_route",
+      "kind": "discover_clue",
+      "clue_id": "route_note",
+      "anchor_kind": "npc",
+      "anchor_id": "nico_bell"
+    },
+    {
+      "id": "inspect_annex_badge",
+      "kind": "discover_clue",
+      "clue_id": "annex_badge",
+      "anchor_kind": "clue_spawn",
+      "anchor_id": "annex_badge"
+    },
+    {
+      "id": "commit_dialogue",
+      "kind": "resolve_route",
+      "route_id": "dialogue",
+      "anchor_kind": "npc",
+      "anchor_id": "mara_vale"
+    },
+    {
+      "id": "commit_stealth",
+      "kind": "resolve_route",
+      "route_id": "stealth",
+      "anchor_kind": "npc",
+      "anchor_id": "nico_bell"
+    },
+    {
+      "id": "commit_confrontation",
+      "kind": "resolve_route",
+      "route_id": "confrontation",
+      "anchor_kind": "npc",
+      "anchor_id": "etta_quill"
+    }
+  ],
+  "constraints": {
+    "no_player_proximity_claim": true,
+    "no_actor_spawn_claim": true,
+    "no_input_binding_claim": true,
+    "no_automatic_feeding": true,
+    "no_quest_overwrite": true,
+    "invalid_action_no_op": true
+  }
+}
