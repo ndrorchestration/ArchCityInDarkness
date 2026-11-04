@@ -21,6 +21,7 @@ Explore a compact nighttime neighborhood, interact with original NPCs, manage hu
 - [M003 Glassbend spatial/camera marker prototype](docs/GLASSBEND_LAYOUT_CONTRACT.md) — further stacked source-only proposal; no Unreal map or rendering
 - [M004 Glassbend interaction bridge](docs/GLASSBEND_INTERACTION_BRIDGE.md) — explicit action-to-quest C++ adapter and portable contract tests; no player proximity/input or native compile verified
 - [M005 original branching dialogue data](docs/GLASSBEND_DIALOGUE_CONTRACT.md) — five provisional entrypoints and guarded action choices; no Unreal dialogue UI or approved story
+- [M006 text-only Glassbend playthrough](docs/GLASSBEND_TEXT_PREVIEW.md) — run the source story locally; explicitly not Unreal gameplay or canon
 
 ## Current source foundation
 
