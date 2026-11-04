@@ -47,6 +47,9 @@ REQUIRED = [
     "tools/validate_dialogue_contract.py",
     "tools/tests/test_dialogue_contract.py",
     "docs/GLASSBEND_DIALOGUE_CONTRACT.md",
+    "tools/glassbend_text_preview.py",
+    "tools/tests/test_glassbend_text_preview.py",
+    "docs/GLASSBEND_TEXT_PREVIEW.md",
 ]
 missing = [str(f) for f in REQUIRED if not (ROOT / f).is_file()]
 assert not missing, f"Missing required files: {missing}"
@@ -92,4 +95,7 @@ dialogue_problems = validate_dialogue(
 )
 assert not dialogue_problems, "Source-only dialogue/interaction drift: " + "; ".join(dialogue_problems)
 
-print("PASS: manifest, quest, layout, interaction and original dialogue parity (source only; Unreal unverified)")
+preview_source = (ROOT / "tools/glassbend_text_preview.py").read_text(encoding="utf-8")
+assert "Not Unreal gameplay or approved canon" in preview_source
+assert "validate_dialogue" in preview_source and "validate_bindings" in preview_source
+print("PASS: manifest, quest, layout, interaction, dialogue and text preview (source only; Unreal unverified)")
