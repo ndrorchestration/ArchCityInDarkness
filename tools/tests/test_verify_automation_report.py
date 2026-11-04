@@ -6,6 +6,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from verify_automation_report import TEST, verify
 
+QUEST = "ArchCityInDarkness.Quest.Glassbend.Contract"
+
 
 class Contract(unittest.TestCase):
     def setUp(self):
@@ -63,6 +65,33 @@ class Contract(unittest.TestCase):
     def test_invalid_json(self):
         self.report.write_text("bad-json")
         self.assertTrue(verify(self.report, self.log))
+
+
+    def test_quest_named_success(self):
+        self.data["tests"][0]["fullTestPath"] = QUEST
+        self.text = self.text.replace(TEST, QUEST)
+        self.write()
+        self.assertEqual(verify(self.report, self.log, expected=QUEST), [])
+
+    def test_quest_report_cannot_be_hunger(self):
+        self.text = self.text.replace(TEST, QUEST)
+        self.write()
+        self.assertTrue(verify(self.report, self.log, expected=QUEST))
+
+    def test_quest_log_cannot_be_hunger(self):
+        self.data["tests"][0]["fullTestPath"] = QUEST
+        self.write()
+        self.assertTrue(verify(self.report, self.log, expected=QUEST))
+
+    def test_quest_duplicate_report_cannot_pass(self):
+        self.data["tests"] = [
+            {"fullTestPath": QUEST, "state": "Success"},
+            {"fullTestPath": QUEST, "state": "Success"},
+        ]
+        self.data["succeeded"] = 2
+        self.text = self.text.replace(TEST, QUEST)
+        self.write()
+        self.assertTrue(verify(self.report, self.log, expected=QUEST))
 
 
 if __name__ == "__main__":
