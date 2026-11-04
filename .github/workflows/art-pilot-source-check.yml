@@ -1,0 +1,31 @@
+name: Art pilot source-only validation
+
+on:
+  pull_request:
+    paths:
+      - 'ArtPipeline/**'
+      - 'tools/validate_art_pilot.py'
+      - 'tools/tests/test_art_pilot.py'
+      - 'tools/Get-ArtPilotReadiness.ps1'
+      - 'docs/DAZ_METAHUMAN_ART_PILOT.md'
+      - '.github/workflows/art-pilot-source-check.yml'
+  push:
+    paths:
+      - 'ArtPipeline/**'
+      - 'tools/validate_art_pilot.py'
+      - 'tools/tests/test_art_pilot.py'
+      - 'tools/Get-ArtPilotReadiness.ps1'
+      - 'docs/DAZ_METAHUMAN_ART_PILOT.md'
+      - '.github/workflows/art-pilot-source-check.yml'
+
+jobs:
+  manifest-only:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate no art assets are bundled, and provenance gates remain closed
+        run: |
+          python3 tools/validate_art_pilot.py
+          python3 -m unittest discover -s tools/tests -p 'test_art_pilot.py' -v
