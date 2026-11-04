@@ -2,6 +2,7 @@
 """Portable sanity check. This does NOT compile, run, or verify Unreal Engine."""
 import json
 from pathlib import Path
+from validate_glassbend_layout import LAYOUT_PATH, QUEST_PATH, load_json, validate_layout
 
 ROOT = Path(__file__).resolve().parents[1]
 REQUIRED = [
@@ -29,6 +30,10 @@ REQUIRED = [
     "Source/ArchCityInDarkness/Private/ACIDQuestLedgerComponent.cpp",
     "Source/ArchCityInDarkness/Private/Tests/ACIDQuestLedgerComponentTests.cpp",
     "docs/QUEST_LEDGER_SOURCE_PROTOTYPE.md",
+    "Prototypes/Glassbend/layout_v1.json",
+    "tools/validate_glassbend_layout.py",
+    "tools/tests/test_glassbend_layout.py",
+    "docs/GLASSBEND_LAYOUT_CONTRACT.md",
 ]
 missing = [str(f) for f in REQUIRED if not (ROOT / f).is_file()]
 assert not missing, f"Missing required files: {missing}"
@@ -56,4 +61,7 @@ for route in contract["routes"]:
 assert "TryRestoreSnapshot" in quest_header and "ValidateSnapshot" in quest_source
 assert "ArchCityInDarkness.Quest.Glassbend.Contract" in quest_tests
 
-print("PASS: manifest, expected sources, prototype quest string/enum consistency (static only; Unreal unverified)")
+layout_problems = validate_layout(load_json(LAYOUT_PATH), load_json(QUEST_PATH))
+assert not layout_problems, "Source-only layout/quest drift: " + "; ".join(layout_problems)
+
+print("PASS: manifest, source quest contract, spatial layout IDs and bounds (static only; Unreal unverified)")
