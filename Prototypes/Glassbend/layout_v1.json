@@ -1,0 +1,251 @@
+{
+  "schema_version": 1,
+  "status": "PROTOTYPE_NOT_CANON",
+  "scene_id": "glassbend_greybox_v1",
+  "quest_id": "the_unclaimed_hour",
+  "coordinate_system": "fictional_local_xy_southwest_origin",
+  "units": "meters",
+  "cm_per_meter": 100,
+  "bounds_m": [
+    140,
+    90
+  ],
+  "player_start_m": [
+    22,
+    20
+  ],
+  "player_proxy_height_cm": 175,
+  "zones": [
+    {
+      "id": "shelter",
+      "center_m": [
+        22,
+        12
+      ],
+      "size_m": [
+        35,
+        8
+      ],
+      "purpose": "arrival and receipt inspection"
+    },
+    {
+      "id": "archive",
+      "center_m": [
+        60,
+        37
+      ],
+      "size_m": [
+        25,
+        18
+      ],
+      "purpose": "Mara dialogue and ledger clue"
+    },
+    {
+      "id": "alley",
+      "center_m": [
+        93,
+        49
+      ],
+      "size_m": [
+        12,
+        36
+      ],
+      "purpose": "courier route and stealth preparation"
+    },
+    {
+      "id": "annex",
+      "center_m": [
+        123,
+        47
+      ],
+      "size_m": [
+        28,
+        20
+      ],
+      "purpose": "Etta and confrontation branch"
+    },
+    {
+      "id": "overlook",
+      "center_m": [
+        65,
+        82
+      ],
+      "size_m": [
+        50,
+        12
+      ],
+      "purpose": "night mood and visual destination"
+    }
+  ],
+  "actors": [
+    {
+      "id": "mara_vale",
+      "zone": "archive",
+      "position_m": [
+        60,
+        37
+      ],
+      "interaction_radius_m": 2.5
+    },
+    {
+      "id": "nico_bell",
+      "zone": "alley",
+      "position_m": [
+        93,
+        49
+      ],
+      "interaction_radius_m": 2.5
+    },
+    {
+      "id": "etta_quill",
+      "zone": "annex",
+      "position_m": [
+        123,
+        47
+      ],
+      "interaction_radius_m": 2.5
+    }
+  ],
+  "clue_spawns": [
+    {
+      "id": "shift_receipt",
+      "zone": "shelter",
+      "position_m": [
+        22,
+        12
+      ]
+    },
+    {
+      "id": "ledger_gap",
+      "zone": "archive",
+      "position_m": [
+        62,
+        35
+      ]
+    },
+    {
+      "id": "route_note",
+      "zone": "alley",
+      "position_m": [
+        95,
+        48
+      ]
+    },
+    {
+      "id": "annex_badge",
+      "zone": "annex",
+      "position_m": [
+        112,
+        41
+      ]
+    }
+  ],
+  "traversal_waypoints_m": [
+    [
+      22,
+      20
+    ],
+    [
+      44,
+      20
+    ],
+    [
+      60,
+      26
+    ],
+    [
+      79,
+      26
+    ],
+    [
+      82,
+      43
+    ],
+    [
+      103,
+      43
+    ],
+    [
+      109,
+      62
+    ],
+    [
+      93,
+      72
+    ],
+    [
+      67,
+      72
+    ],
+    [
+      40,
+      65
+    ],
+    [
+      25,
+      42
+    ],
+    [
+      22,
+      20
+    ]
+  ],
+  "camera_markers": [
+    {
+      "id": "arrival",
+      "position_m": [
+        5,
+        19
+      ],
+      "look_at_m": [
+        22,
+        12
+      ],
+      "fov_degrees": 60
+    },
+    {
+      "id": "archive",
+      "position_m": [
+        46,
+        35
+      ],
+      "look_at_m": [
+        60,
+        37
+      ],
+      "fov_degrees": 50
+    },
+    {
+      "id": "alley",
+      "position_m": [
+        84,
+        43
+      ],
+      "look_at_m": [
+        93,
+        49
+      ],
+      "fov_degrees": 45
+    },
+    {
+      "id": "overlook",
+      "position_m": [
+        60,
+        70
+      ],
+      "look_at_m": [
+        65,
+        82
+      ],
+      "fov_degrees": 60
+    }
+  ],
+  "visual_review": {
+    "target_resolution": [
+      1920,
+      1080
+    ],
+    "intent": "night readability, realistic scale, atmospheric depth, distinct NPC silhouettes, legible prompts",
+    "render_status": "NOT_RENDERED"
+  }
+}
