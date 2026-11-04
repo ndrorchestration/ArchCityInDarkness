@@ -2,11 +2,15 @@
 """Noncanonical, text-only Glassbend playthrough preview.
 
 This portable Python program is NOT Unreal Engine gameplay, a built game, a
-world-space interaction check, an approved story, or a disk save system.
+world-space interaction check, an approved story, or a UE SaveGame system. Optional local Python save files are not native persistence.
 It uses existing version-1 quest, dialogue, and action contracts.
 """
 import argparse
+from pathlib import Path
 from dataclasses import dataclass, field
+from glassbend_savegame import (
+    default_save_path, load_preview_state, save_preview_state,
+)
 from typing import Optional
 
 from validate_quest_prototype import load_quest, resolve, validate_quest
@@ -185,21 +189,47 @@ def run_demo() -> int:
     return 0
 
 
-def run_interactive() -> int:
+def run_interactive(save_file: Optional[Path] = None) -> int:
     session = make_session()
+    save_file = Path(save_file) if save_file is not None else default_save_path()
     print("GLASSBEND: SOURCE-ONLY TEXT PREVIEW; noncanonical and NOT playable Unreal.")
-    print("Choose a location number, a dialogue option number, or q to quit.")
+    print("Choose a location/choice number; at the street menu, s=save, l=load, q=quit.")
+    print("Local saves are opt-in; files are outside the public repository.")
     anchors = list(ENTRY_LABELS.items())
     while True:
         print("\n" + session.state.summary())
-        if session.state.phase == "Resolved":
+        resolved = session.state.phase == "Resolved"
+        if resolved:
             print("This investigation is resolved. Further quest changes are locked.")
-            return 0
-        for i, (_, label) in enumerate(anchors, 1):
-            print(f"  {i}. {label}")
-        selection = input("Visit (1-5, q): ").strip().lower()
+        else:
+            for i, (_, label) in enumerate(anchors, 1):
+                print(f"  {i}. {label}")
+        selection = input("Visit (1-5, s=save, l=load, q=quit): ").strip().lower()
         if selection == "q":
             return 0
+        if selection == "s":
+            try:
+                save_preview_state(save_file, session.state, session.quest)
+                print(f"Local preview saved: {save_file}")
+            except (OSError, ValueError) as exc:
+                print(f"Save rejected; previous file remains unchanged: {exc}")
+            continue
+        if selection == "l":
+            try:
+                # Read/validate first and only swap the active session on success.
+                payload = load_preview_state(save_file, session.quest)
+                new_session = make_session()
+                new_session.state = PreviewState(
+                    **{**payload, "clues": set(payload["clues"])}
+                )
+                session = new_session
+                print(f"Local preview loaded: {save_file}")
+            except (OSError, ValueError) as exc:
+                print(f"Load rejected; current game remains unchanged: {exc}")
+            continue
+        if resolved:
+            print("This investigation is already resolved; start a new run to choose again.")
+            continue
         if not selection.isdecimal() or not 1 <= int(selection) <= len(anchors):
             print("Invalid location; no changes made.")
             continue
@@ -225,8 +255,10 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--demo", action="store_true",
                         help="Run the three deterministic text-only quest demonstrations")
+    parser.add_argument("--save-file", type=Path, default=None,
+                        help="Optional local save path (only written after an explicit s command)")
     args = parser.parse_args()
-    return run_demo() if args.demo else run_interactive()
+    return run_demo() if args.demo else run_interactive(args.save_file)
 
 
 if __name__ == "__main__":
