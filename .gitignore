@@ -1,0 +1,20 @@
+# Python source-only test outputs
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local art probes and outputs (never publish licensed third-party assets by default)
+ArtPipeline/**/PrivateAssets/
+ArtPipeline/**/Exports/
+ArtPipeline/**/Captures/
+ArtPipeline/**/Temp/
+ArtPipeline/**/Evidence/
+
+# Local Unreal/Daz project caches and packaged results
+DerivedDataCache/
+Intermediate/
+Saved/
+Binaries/
+.vs/
+*.sln
+*.suo
