@@ -18,6 +18,7 @@ Explore a compact nighttime neighborhood, interact with original NPCs, manage hu
 - [Glassbend level blockout plan](docs/GLASSBEND_GREYBOX_PLAN.md)
 - [Source-only quest data contract](Prototypes/Glassbend/the_unclaimed_hour.json)
 - [M002 quest ledger C++ source candidate](docs/QUEST_LEDGER_SOURCE_PROTOTYPE.md) — stacked review branch; native unverified
+- [M003 Glassbend spatial/camera marker prototype](docs/GLASSBEND_LAYOUT_CONTRACT.md) — further stacked source-only proposal; no Unreal map or rendering
 
 ## Current source foundation
 
