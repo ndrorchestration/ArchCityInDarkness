@@ -14,6 +14,7 @@
 - M002: `UACIDQuestLedgerComponent` provides guarded deterministic clue discovery, one-way route resolution, a versioned in-memory snapshot contract and native automation **test source**. No actual disk persistence.
 - M003: `layout_v1.json` defines provisional 140 × 90 m fictional Glassbend environment markers and four review cameras. It is not a `.umap` or proof of physical traversal.
 - M004: `UACIDQuestInteractionBridge::TryApplyAction` is a closed-list Blueprint-callable action-ID adapter. It delegates to the quest ledger only. It does **not** validate actor identity, distance, line of sight, input, or ownership. Those conditions are required before in-engine activation. The associated C++ automation test remains **NOT_RUN** until a native Unreal verification.
+- M005: `dialogue_v1.json` is an original five-entrypoint dialogue graph with guarded success/failure branches referring to M004 action IDs. Portable graph validation checks reachability/caption shape but no widget, localization pipeline, voice acting or in-engine dialogue exists.
 - No source-only milestone is an approved art, character, gameplay, build, collision, rendering or release artifact. All are stacked review branches and maintain the originality/IP boundary.
 
 ## Extension seam — proposals, not implemented
