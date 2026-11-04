@@ -5,7 +5,7 @@ param(
     [string]$EngineRoot = 'C:\Program Files\Epic Games\UE_5.8',
     [string]$ProjectRoot = (Join-Path $PSScriptRoot '..'),
     [string]$PythonExecutable = 'python',
-    [ValidateSet('ArchCityInDarkness.Survival.Hunger.Contract', 'ArchCityInDarkness.Quest.Glassbend.Contract')]
+    [ValidateSet('ArchCityInDarkness.Survival.Hunger.Contract', 'ArchCityInDarkness.Quest.Glassbend.Contract', 'ArchCityInDarkness.Interaction.Glassbend.Contract')]
     [string[]]$Tests = @('ArchCityInDarkness.Survival.Hunger.Contract')
 )
 Set-StrictMode -Version Latest
@@ -70,7 +70,11 @@ try {
     # Run each named test in a distinct Editor process and report directory.
     # Do not accept a pass from one test as evidence for another.
     foreach ($TestName in $RequestedTests) {
-        $ShortName = if ($TestName -eq 'ArchCityInDarkness.Survival.Hunger.Contract') { 'Hunger' } else { 'Quest' }
+        $ShortName = switch ($TestName) {
+            'ArchCityInDarkness.Survival.Hunger.Contract' { 'Hunger' }
+            'ArchCityInDarkness.Quest.Glassbend.Contract' { 'Quest' }
+            'ArchCityInDarkness.Interaction.Glassbend.Contract' { 'Interaction' }
+        }
         $TestReport = Join-Path $ReportsRoot $ShortName
         $TestLog = Join-Path $Output "Editor-$ShortName.log"
         $TestStdout = Join-Path $Output "Editor-$ShortName-stdout.log"
