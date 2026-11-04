@@ -20,11 +20,21 @@ pwsh -NoProfile -File tools/Verify-UnrealNative.ps1 -EngineRoot "C:\Program File
 
 The script first checks for active Unreal Editor or Live Coding processes. If either is present, it fails closed with a saved summary and **does not terminate any process, run a build, or disturb unsaved work**. Save and close the Editor normally before rerunning. This conservative guard may also detect an Editor opened for another project.
 
-The script checks Engine/Build/Build.version, compiles ArchCityInDarknessEditor for Win64 Development, and runs the exact test ArchCityInDarkness.Survival.Hunger.Contract via UnrealEditor-Cmd. It creates a separate ignored Saved/ArchCityVerification/ run directory with build/editor logs, the Unreal JSON test report, and a summary.
+The script checks Engine/Build/Build.version and compiles ArchCityInDarknessEditor for Win64 Development. By default it executes only `ArchCityInDarkness.Survival.Hunger.Contract` via UnrealEditor-Cmd. It creates an ignored `Saved/ArchCityVerification/` run directory with the build log, individual test reports and editor logs, and a summary. A report is valid only for its exact named test; results cannot be shared across contracts.
+
+**M002 only, after M001-B is independently verified at the reviewed M001 commit:** in a fresh, clean M002 feature-branch checkout with Unreal Editor / Live Coding closed normally, run the same script with both tests explicitly selected:
+
+~~~powershell
+& .\tools\Verify-UnrealNative.ps1 -EngineRoot 'C:\Program Files\Epic Games\UE_5.8' -Tests `
+    'ArchCityInDarkness.Survival.Hunger.Contract', `
+    'ArchCityInDarkness.Quest.Glassbend.Contract'
+~~~
+
+The script compiles once, then launches a distinct UnrealEditor-Cmd process for each requested contract. The reports are separated under `AutomationReport/Hunger` and `AutomationReport/Quest`; each has a matching `Editor-Hunger.log` or `Editor-Quest.log`. `summary.json` records the exact Git head, requested tests, per-test results, and overall fail-closed outcome. It is not acceptable to use a portable test, an old report, a different branch, or a test of one contract to substantiate the other. Any failed test blocks an overall PASS.
 
 **PASS** requires successful native compile and Editor process exit, exactly one named test in index.json with state Success, zero failed/notRun counts, and the matching successful completion event plus TEST COMPLETE exit-code-0 marker in native logs. Missing or contradictory evidence is **FAIL_CLOSED**, even if process exit is zero.
 
-The runner does not install software, alter other repositories, merge PRs, create maps, package games, or promote assets. Review evidence and remove personal local paths before sharing in the public GitHub PR. If native verification fails, keep draft PR #1 open and document the failed gate in issue #2.
+The runner does not install software, alter other repositories, merge PRs, create maps, package games, or promote assets. Review evidence and remove personal local paths before sharing in the public GitHub PR. If native verification fails, keep the relevant draft PR open and document the failed gate in issue #2 (hunger) or issue #5 (quest). Never force-close user Editor processes.
 
 ## What a PASS does not establish
 No playable map, quest, player controls, save/load, art fidelity, or originality/trademark clearance is established by this unit test.
