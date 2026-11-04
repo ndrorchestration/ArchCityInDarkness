@@ -50,6 +50,9 @@ REQUIRED = [
     "tools/glassbend_text_preview.py",
     "tools/tests/test_glassbend_text_preview.py",
     "docs/GLASSBEND_TEXT_PREVIEW.md",
+    "tools/glassbend_savegame.py",
+    "tools/tests/test_glassbend_savegame.py",
+    "docs/GLASSBEND_PREVIEW_SAVEGAME.md",
 ]
 missing = [str(f) for f in REQUIRED if not (ROOT / f).is_file()]
 assert not missing, f"Missing required files: {missing}"
@@ -98,4 +101,8 @@ assert not dialogue_problems, "Source-only dialogue/interaction drift: " + "; ".
 preview_source = (ROOT / "tools/glassbend_text_preview.py").read_text(encoding="utf-8")
 assert "Not Unreal gameplay or approved canon" in preview_source
 assert "validate_dialogue" in preview_source and "validate_bindings" in preview_source
-print("PASS: manifest, quest, layout, interaction, dialogue and text preview (source only; Unreal unverified)")
+save_source = (ROOT / "tools/glassbend_savegame.py").read_text(encoding="utf-8")
+assert "def load_preview_state(" in save_source and "def save_preview_state(" in save_source
+assert "os.replace(" in save_source and "MAX_SAVE_BYTES" in save_source
+assert "default_save_path" in preview_source and "load_preview_state" in preview_source
+print("PASS: source contracts, text preview and versioned local-save boundary (Unreal unverified)")
