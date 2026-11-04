@@ -4,7 +4,9 @@
 param(
     [string]$EngineRoot = 'C:\Program Files\Epic Games\UE_5.8',
     [string]$ProjectRoot = (Join-Path $PSScriptRoot '..'),
-    [string]$PythonExecutable = 'python'
+    [string]$PythonExecutable = 'python',
+    [ValidateSet('ArchCityInDarkness.Survival.Hunger.Contract', 'ArchCityInDarkness.Quest.Glassbend.Contract')]
+    [string[]]$Tests = @('ArchCityInDarkness.Survival.Hunger.Contract')
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -29,13 +31,13 @@ if ($LASTEXITCODE -ne 0 -or $Branch -eq 'main' -or -not $Branch) { throw 'Run fr
 $Dirty = @(& git -C $ProjectRoot status --porcelain)
 if ($LASTEXITCODE -ne 0) { throw 'Cannot check Git status' }
 if ($Dirty.Count -gt 0) { throw 'Tracked/untracked changes present; make an isolated clean checkout first' }
+$RequestedTests = @($Tests | Select-Object -Unique)
+if ($RequestedTests.Count -eq 0) { throw 'Specify at least one named contract test' }
 $RunId = (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ') + '-' + [guid]::NewGuid().ToString('N').Substring(0, 8)
 $Output = Join-Path $ProjectRoot "Saved\ArchCityVerification\$RunId"
-$Report = Join-Path $Output 'AutomationReport'
-New-Item -ItemType Directory -Path $Report -Force | Out-Null
+$ReportsRoot = Join-Path $Output 'AutomationReport'
+New-Item -ItemType Directory -Path $ReportsRoot -Force | Out-Null
 $BuildLog = Join-Path $Output 'Build.log'
-$EditorLog = Join-Path $Output 'Editor.log'
-$EditorStdout = Join-Path $Output 'Editor-stdout.log'
 $SummaryPath = Join-Path $Output 'summary.json'
 $Summary = [ordered]@{
     timestamp_utc = (Get-Date).ToUniversalTime().ToString('o')
@@ -44,6 +46,8 @@ $Summary = [ordered]@{
     ue_version = '5.8.4'
     build = 'NOT_RUN'
     test = 'NOT_RUN'
+    requested_tests = @($RequestedTests)
+    test_results = [ordered]@{}
     outcome = 'FAIL_CLOSED'
     blocker = $null
     error = $null
@@ -63,16 +67,28 @@ try {
     if ($BuildExit -ne 0) { throw "Build.bat returned $BuildExit" }
     $Summary.build = 'PASS'
     $Summary.test = 'STARTED'
-    $EditorArgs = @(
-        $Project, '-unattended', '-nop4', '-nosplash', '-NoSound', '-NullRHI',
-        "-ReportExportPath=$Report", '-ExecCmds=Automation RunTest ArchCityInDarkness.Survival.Hunger.Contract;Quit',
-        "-abslog=$EditorLog"
-    )
-    & $Editor @EditorArgs 2>&1 | Tee-Object -FilePath $EditorStdout
-    $EditorExit = $LASTEXITCODE
-    if ($EditorExit -ne 0) { throw "UnrealEditor-Cmd returned $EditorExit" }
-    & $PythonExecutable $Verifier '--report' (Join-Path $Report 'index.json') '--log' $EditorLog
-    if ($LASTEXITCODE -ne 0) { throw 'Native automation evidence failed validation' }
+    # Run each named test in a distinct Editor process and report directory.
+    # Do not accept a pass from one test as evidence for another.
+    foreach ($TestName in $RequestedTests) {
+        $ShortName = if ($TestName -eq 'ArchCityInDarkness.Survival.Hunger.Contract') { 'Hunger' } else { 'Quest' }
+        $TestReport = Join-Path $ReportsRoot $ShortName
+        $TestLog = Join-Path $Output "Editor-$ShortName.log"
+        $TestStdout = Join-Path $Output "Editor-$ShortName-stdout.log"
+        New-Item -ItemType Directory -Path $TestReport -Force | Out-Null
+        $Summary.test_results[$TestName] = 'STARTED'
+        $EditorArgs = @(
+            $Project, '-unattended', '-nop4', '-nosplash', '-NoSound', '-NullRHI',
+            "-ReportExportPath=$TestReport",
+            ("-ExecCmds=Automation RunTest {0};Quit" -f $TestName),
+            "-abslog=$TestLog"
+        )
+        & $Editor @EditorArgs 2>&1 | Tee-Object -FilePath $TestStdout
+        $EditorExit = $LASTEXITCODE
+        if ($EditorExit -ne 0) { throw "$TestName UnrealEditor-Cmd returned $EditorExit" }
+        & $PythonExecutable $Verifier '--report' (Join-Path $TestReport 'index.json') '--log' $TestLog '--test' $TestName
+        if ($LASTEXITCODE -ne 0) { throw "$TestName native automation evidence failed validation" }
+        $Summary.test_results[$TestName] = 'PASS'
+    }
     $Summary.test = 'PASS'
     $Summary.outcome = 'PASS'
 }
