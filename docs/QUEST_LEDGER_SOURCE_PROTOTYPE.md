@@ -22,7 +22,7 @@ Hunger remains untouched by this component. No mandatory feeding, attack or nonl
 ## Test gate
 1. GitHub structure CI and Python prototype tests may pass; **do not equate them with native Unreal evidence**.
 2. After closing Unreal Editor / Live Coding normally, open M001 source head in a separate review checkout, compile and run `ArchCityInDarkness.Survival.Hunger.Contract` first.
-3. Only after passing M001 gate, compile this stacked M002 branch and execute `ArchCityInDarkness.Quest.Glassbend.Contract` with exact logs.
+3. Only after passing M001 gate, compile this stacked M002 branch and run both `ArchCityInDarkness.Survival.Hunger.Contract` and `ArchCityInDarkness.Quest.Glassbend.Contract` using the explicit `-Tests` selection in [the native runbook](NATIVE_VERIFICATION_RUNBOOK.md). The runner generates a distinct report and Editor log for each exact test; an individual missing or failed result fails the overall gate. This runner extension is source-only until verified on Windows.
 4. No changes are merged, and no Blueprint, level, NPC, UE SaveGame, or world-playability is claimed.
 5. Any native error creates an issue with evidence instead of silently loosening the requirements.
 
