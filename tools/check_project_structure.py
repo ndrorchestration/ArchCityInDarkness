@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 from validate_glassbend_layout import LAYOUT_PATH, QUEST_PATH, load_json, validate_layout
+from validate_interaction_bindings import BINDINGS_PATH, BRIDGE_CPP_PATH, load as load_bindings, validate_bindings
 
 ROOT = Path(__file__).resolve().parents[1]
 REQUIRED = [
@@ -34,6 +35,13 @@ REQUIRED = [
     "tools/validate_glassbend_layout.py",
     "tools/tests/test_glassbend_layout.py",
     "docs/GLASSBEND_LAYOUT_CONTRACT.md",
+    "Prototypes/Glassbend/interaction_bindings_v1.json",
+    "Source/ArchCityInDarkness/Public/ACIDQuestInteractionBridge.h",
+    "Source/ArchCityInDarkness/Private/ACIDQuestInteractionBridge.cpp",
+    "Source/ArchCityInDarkness/Private/Tests/ACIDQuestInteractionBridgeTests.cpp",
+    "tools/validate_interaction_bindings.py",
+    "tools/tests/test_interaction_bindings.py",
+    "docs/GLASSBEND_INTERACTION_BRIDGE.md",
 ]
 missing = [str(f) for f in REQUIRED if not (ROOT / f).is_file()]
 assert not missing, f"Missing required files: {missing}"
@@ -64,4 +72,13 @@ assert "ArchCityInDarkness.Quest.Glassbend.Contract" in quest_tests
 layout_problems = validate_layout(load_json(LAYOUT_PATH), load_json(QUEST_PATH))
 assert not layout_problems, "Source-only layout/quest drift: " + "; ".join(layout_problems)
 
-print("PASS: manifest, source quest contract, spatial layout IDs and bounds (static only; Unreal unverified)")
+binding_problems = validate_bindings(
+    load_bindings(BINDINGS_PATH), load_json(QUEST_PATH), load_json(LAYOUT_PATH),
+    BRIDGE_CPP_PATH.read_text(encoding="utf-8"),
+)
+assert not binding_problems, "Source-only action bridge drift: " + "; ".join(binding_problems)
+
+interaction_test = (ROOT / "Source/ArchCityInDarkness/Private/Tests/ACIDQuestInteractionBridgeTests.cpp").read_text(encoding="utf-8")
+assert "ArchCityInDarkness.Interaction.Glassbend.Contract" in interaction_test
+assert "TryApplyAction" in (ROOT / "Source/ArchCityInDarkness/Public/ACIDQuestInteractionBridge.h").read_text(encoding="utf-8")
+print("PASS: manifest, quest, layout and interaction bridge parity (source-only, Unreal unverified)")
