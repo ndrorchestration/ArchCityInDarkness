@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "project": "ArchCityInDarkness",
+  "pilot_id": "ART-PILOT-001",
+  "status": "PROTOTYPE_NOT_CANON",
+  "readiness": "BLOCKED",
+  "character": {
+    "id": "mara_vale",
+    "name": "Mara Vale",
+    "kind": "ORIGINAL_FICTIONAL_NPC",
+    "visual_review": "PENDING",
+    "reference_art": "NOT_APPROVED"
+  },
+  "visual_contract": {
+    "engine_target": "Unreal Engine 5.8",
+    "resolution_px": [
+      1920,
+      1080
+    ],
+    "matched_focal_length_mm": 50,
+    "views": [
+      "front_portrait",
+      "three_quarter_portrait",
+      "profile_portrait",
+      "full_body",
+      "neutral_expression"
+    ],
+    "criteria": [
+      "believable_scale_and_curvature",
+      "physically_plausible_lighting",
+      "intentional_cinematic_framing",
+      "atmospheric_depth",
+      "readable_visual_contrast",
+      "hair_and_clothing_articulation",
+      "animation_and_skeleton_readiness",
+      "frame_time_and_memory_budget"
+    ]
+  },
+  "candidates": [
+    {
+      "id": "daz",
+      "pipeline": "DAZ_STUDIO_6",
+      "source_content": "NONE_SELECTED",
+      "license_status": "UNVERIFIED",
+      "license_evidence": [],
+      "bridge_status": "NOT_VERIFIED",
+      "native_import": "NOT_RUN",
+      "gpu_captures": [],
+      "creator_approval": false
+    },
+    {
+      "id": "metahuman",
+      "pipeline": "METAHUMAN",
+      "source_content": "NONE_SELECTED",
+      "license_status": "UNVERIFIED",
+      "license_evidence": [],
+      "bridge_status": "NOT_APPLICABLE",
+      "native_import": "NOT_RUN",
+      "gpu_captures": [],
+      "creator_approval": false
+    }
+  ],
+  "constraints": {
+    "no_private_larp_assets": true,
+    "no_unlicensed_interactive_geometry": true,
+    "no_production_asset_import": true,
+    "do_not_interrupt_install_manager": true,
+    "require_native_unreal_visual_evidence": true
+  }
+}
