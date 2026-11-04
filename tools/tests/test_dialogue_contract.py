@@ -120,6 +120,53 @@ class DialogueContract(unittest.TestCase):
         ]
         self.assertTrue(self.errors())
 
+    def select_reference(self, node_id, choice_id, state):
+        """Choose a node edge using the pure reference quest state, not Unreal."""
+        node = next(n for n in self.dialogue["nodes"] if n["id"] == node_id)
+        choice = next(c for c in node["choices"] if c["id"] == choice_id)
+        if choice["action_id"] is None:
+            return choice["on_success"]
+        success, _ = apply_reference(
+            state, choice["action_id"], self.bindings, self.quest
+        )
+        return choice["on_success"] if success else choice["on_failure"]
+
+    def new_reference_state(self):
+        return {"phase":"Investigating", "clues":set(), "route":None,
+                "evidence":None, "exposure":0, "hunger":25}
+
+    def test_mara_failure_then_dialogue_choice_routes_to_correct_node(self):
+        state = self.new_reference_state()
+        self.assertEqual(
+            self.select_reference("mara_start", "mara_resolve", state),
+            "mara_missing",
+        )
+        self.assertEqual(self.select_reference("receipt_start", "receipt_inspect", state), "receipt_found")
+        self.assertEqual(self.select_reference("mara_start", "mara_ask", state), "mara_ledger")
+        self.assertEqual(self.select_reference("mara_start", "mara_resolve", state), "mara_resolved")
+        self.assertEqual(state["route"], "dialogue")
+
+    def test_nico_failure_then_stealth_choice_routes_to_correct_node(self):
+        state = self.new_reference_state()
+        self.assertEqual(
+            self.select_reference("nico_start", "nico_resolve", state),
+            "nico_missing",
+        )
+        self.assertEqual(self.select_reference("nico_start", "nico_ask", state), "nico_route")
+        self.assertEqual(self.select_reference("nico_start", "nico_resolve", state), "nico_resolved")
+        self.assertEqual(state["evidence"], "timecard_photo")
+
+    def test_etta_failure_then_confrontation_routes_to_correct_node(self):
+        state = self.new_reference_state()
+        self.assertEqual(
+            self.select_reference("etta_start", "etta_resolve", state),
+            "etta_missing",
+        )
+        self.assertEqual(self.select_reference("badge_start", "badge_inspect", state), "badge_found")
+        self.assertEqual(self.select_reference("etta_start", "etta_resolve", state), "etta_resolved")
+        self.assertEqual(state["route"], "confrontation")
+        self.assertEqual(state["hunger"], 25)
+
     def test_three_nonviolent_reference_routes(self):
         sequences = (
             (["inspect_receipt", "ask_mara_about_ledger", "commit_dialogue"],
