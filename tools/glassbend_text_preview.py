@@ -193,7 +193,7 @@ def run_interactive(save_file: Optional[Path] = None) -> int:
     session = make_session()
     save_file = Path(save_file) if save_file is not None else default_save_path()
     print("GLASSBEND: SOURCE-ONLY TEXT PREVIEW; noncanonical and NOT playable Unreal.")
-    print("Choose a location/choice number; at the street menu, s=save, l=load, q=quit.")
+    print("Choose a location/choice number; at the street menu, n=new, s=save, l=load, q=quit.")
     print("Local saves are opt-in; files are outside the public repository.")
     anchors = list(ENTRY_LABELS.items())
     while True:
@@ -204,9 +204,17 @@ def run_interactive(save_file: Optional[Path] = None) -> int:
         else:
             for i, (_, label) in enumerate(anchors, 1):
                 print(f"  {i}. {label}")
-        selection = input("Visit (1-5, s=save, l=load, q=quit): ").strip().lower()
+        selection = input("Visit (1-5, n=new, s=save, l=load, q=quit): ").strip().lower()
         if selection == "q":
             return 0
+        if selection == "n":
+            confirmation = input("Start a new investigation? Unsaved progress will be lost (y/N): ").strip().lower()
+            if confirmation == "y":
+                session = make_session()
+                print("New investigation started. Your saved file was not changed.")
+            else:
+                print("New investigation cancelled; current progress is unchanged.")
+            continue
         if selection == "s":
             try:
                 save_preview_state(save_file, session.state, session.quest)
