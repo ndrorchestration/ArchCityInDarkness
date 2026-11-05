@@ -9,7 +9,7 @@ From a clean, isolated M007 checkout, run:
 python tools/glassbend_text_preview.py
 ```
 
-At the **street menu**, type `s` to save and `l` to load. Type `q` to quit. The same choices remain available after reaching a resolved ending, so the final outcome can be saved. There is **no autosave and no autoload**. Starting a new session without `l` begins a fresh investigation.
+At the **street menu**, type `s` to save and `l` to load. Type `n` and confirm to start a fresh investigation, or `q` to quit. These choices remain available after a resolved ending. Starting over discards unsaved in-memory progress but leaves the existing save file untouched; load it to return to that checkpoint. There is **no autosave and no autoload**.
 
 By default, the file is stored outside the public repository in the OS user's local-data directory:
 - Windows: `%LOCALAPPDATA%\\ArchCityInDarkness\\GlassbendPreview\\save_v1.json`

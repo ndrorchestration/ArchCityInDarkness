@@ -238,6 +238,31 @@ class LocalPreviewSaveTests(unittest.TestCase):
         self.assertIn("Load rejected; current game remains unchanged", out.getvalue())
         self.assertIn("Clues: shift_receipt", out.getvalue())
 
+    def test_new_run_resets_progress_without_overwriting_save(self):
+        with patch("builtins.input", side_effect=["1", "1", "1", "s", "n", "y", "q"]):
+            with contextlib.redirect_stdout(io.StringIO()) as out:
+                self.assertEqual(run_interactive(self.path), 0)
+        self.assertIn("New investigation started", out.getvalue())
+        self.assertIn("Clues: (none)", out.getvalue().split("New investigation started")[-1])
+        self.assertEqual(self.load()["clues"], ["shift_receipt"])
+
+    def test_cancel_new_run_preserves_current_progress(self):
+        with patch("builtins.input", side_effect=["1", "1", "1", "n", "n", "q"]):
+            with contextlib.redirect_stdout(io.StringIO()) as out:
+                self.assertEqual(run_interactive(self.path), 0)
+        self.assertIn("New investigation cancelled", out.getvalue())
+        self.assertIn("Clues: shift_receipt", out.getvalue().split("New investigation cancelled")[-1])
+
+    def test_new_run_after_ending_unlocks_investigation(self):
+        inputs = ["3", "1", "2", "3", "2", "1", "n", "y", "q"]
+        with patch("builtins.input", side_effect=inputs), contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(run_interactive(self.path), 0)
+        self.assertIn("Phase: Resolved", out.getvalue())
+        after_reset = out.getvalue().split("New investigation started", 1)
+        self.assertEqual(len(after_reset), 2)
+        self.assertIn("Phase: Investigating", after_reset[1])
+        self.assertIn("Clues: (none)", after_reset[1])
+
     def test_default_save_path_is_not_a_repo_file(self):
         path = default_save_path()
         self.assertEqual(path.name, "save_v1.json")
