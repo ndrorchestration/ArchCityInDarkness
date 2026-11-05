@@ -12,7 +12,7 @@ From a clean checkout of this isolated draft branch, using Python 3:
 python tools/glassbend_text_preview.py
 ```
 
-Follow numbered prompts to visit the shelter receipt, Mara, Nico, the annex badge or Etta. Choose numbered dialogue options. The state readout reports clues, route, route-specific evidence, Mara trust, public exposure and hunger. `q` exits. Reopening a location lets you try alternate questions. Once a route is resolved, all other quest actions remain rejected.
+Follow numbered prompts to visit the shelter receipt, Mara, Nico, the annex badge or Etta. Choose numbered dialogue options. The state readout reports clues, route, route-specific evidence, Mara trust, public exposure and hunger. At the street menu, `s` saves, `l` loads, `n` starts a new investigation after confirmation, and `q` exits. Reopening a location lets you try alternate questions. Once a route is resolved, all other quest actions remain rejected until a new investigation is started. A new investigation leaves the existing save file untouched.
 
 For three deterministic, noninteractive examples (no typing required):
 
@@ -20,7 +20,7 @@ For three deterministic, noninteractive examples (no typing required):
 python tools/glassbend_text_preview.py --demo
 ```
 
-Each demonstration starts with a fresh in-memory state, follows a source-defined route and prints the resulting evidence/exposure/trust. The preview calls the existing pure `resolve` reference implementation from `tools/validate_quest_prototype.py` and uses the exact dialogue and action IDs in the M002–M005 JSON contracts. It does **not** call Unreal C++, simulate proximity, or persist disk saves.
+Each demonstration starts with a fresh in-memory state, follows a source-defined route and prints the resulting evidence/exposure/trust. The preview calls the existing pure `resolve` reference implementation from `tools/validate_quest_prototype.py` and uses the exact dialogue and action IDs in the M002–M005 JSON contracts. It does **not** call Unreal C++ or simulate proximity. Optional local Python saves are described in [the save guide](GLASSBEND_PREVIEW_SAVEGAME.md).
 
 ## Verification evidence
 - `tools/tests/test_glassbend_text_preview.py` tests all three routes, missing prerequisites, duplicate actions, forged choice rejection, irreversible resolution, zero forced hunger mutation and drift rejection.
