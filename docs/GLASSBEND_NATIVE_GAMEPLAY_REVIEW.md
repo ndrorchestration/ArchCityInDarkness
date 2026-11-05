@@ -14,6 +14,7 @@ Safety: exact five-anchor allowlist, player-controlled input requirement, standa
 - The one-time Unreal Python upgrade saved the original review map with five marker actors and a map-specific game mode. Independent Unreal NullRHI reopen printed **ARCHCITY_GAMEPLAY_REVIEW_READBACK_PASS anchors=5** and exited 0.
 - Four separately executed and independently checked native automation reports/logs: **Hunger, Quest, Interaction and Prelude all PASS**. Prelude checked five approved anchor IDs, unknown-ID rejection and null-player rejection; it does not simulate a real pawn physically moving.
 - Source-only checks on the review branch: project structure PASS; **54/54 portable tests PASS**. All local Unreal evidence is under ignored Saved/ folders, not in the repository.
+- Headless **native game runtime smoke PASS** on the committed review map: Unreal launched /Game/ArchCity/Review/Glassbend_Prelude_Greybox with -game -NullRHI -benchmark -seconds=6. Native log confirmed world brought up for play and printed the original Prelude BeginPlay narrative from the new player character; process exited 0. This confirms startup/pawn BeginPlay, **not** actual keyboard/mouse control, 3D rendering, pathfinding or PIE outcome verification.
 - Evidence was gathered against compiled source commit 171916dfde74e2101a4c6dc0415d71443cd92e89 before the final upgraded map binary and verification documentation are committed. Do not describe these as a fresh native replay on a later documentation/map commit.
 
 ## Remaining acceptance gates
