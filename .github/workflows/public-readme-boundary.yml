@@ -1,0 +1,33 @@
+name: Public README boundary check
+
+on:
+  pull_request:
+    paths:
+      - "README.md"
+      - "scripts/check_public_readme.py"
+      - ".github/workflows/public-readme-boundary.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "README.md"
+      - "scripts/check_public_readme.py"
+      - ".github/workflows/public-readme-boundary.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-docs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate safety-contract cases
+        run: python3 scripts/check_public_readme.py --self-test
+      - name: Check public README disclaimers and provenance links
+        run: python3 scripts/check_public_readme.py
