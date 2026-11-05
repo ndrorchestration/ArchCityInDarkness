@@ -12,7 +12,17 @@ Arch City in Darkness is an original urban-supernatural game project set in Colu
 - **Cinematic presentation:** Intentional camera framing, environmental lighting and coherent visual language, subject to native-engine verification.
 - **Evidence and release:** Record exact source revisions, test results, capture provenance and open defects. A passing source-level check is not proof of a playable, approved release.
 
-These pillars are **targets**, not statements that working assets or mechanics already exist. Engine/runtime selection, completed gameplay, rights clearance and release readiness must be verified from project-local evidence before they are claimed.
+These pillars are **target outcomes**, not a claim that a playable Unreal scene already exists. The intended engine is **Unreal Engine 5.8.4 for Windows**; successful native build/test, finished gameplay, rights clearance and release readiness still require project-local evidence.
+
+## Existing review-only development
+
+The project already has substantial **draft, unmerged source work**, separate from the published default branch:
+
+- [M001 foundation and Hunger contract](https://github.com/ndrorchestration/ArchCityInDarkness/pull/1), [M002 quest ledger](https://github.com/ndrorchestration/ArchCityInDarkness/pull/4), [M003 original Glassbend layout](https://github.com/ndrorchestration/ArchCityInDarkness/pull/6), and [M004 interaction bridge](https://github.com/ndrorchestration/ArchCityInDarkness/pull/7).
+- [M005 original branching dialogue](https://github.com/ndrorchestration/ArchCityInDarkness/pull/9), [M006 runnable Python text rehearsal](https://github.com/ndrorchestration/ArchCityInDarkness/pull/11), and [M007 Python text-preview checkpoint persistence](https://github.com/ndrorchestration/ArchCityInDarkness/pull/13). The Python rehearsal is **not a native 3D Unreal game or Unreal SaveGame**.
+- [ART-PILOT-001 Daz/MetaHuman readiness](https://github.com/ndrorchestration/ArchCityInDarkness/pull/16) is a comparison/rights-gating candidate, **not** an imported, rendered or approved game character.
+
+The named candidate PRs were checked as **open, draft and unmerged on November 5, 2026**. Historical source-only/portable-test successes do not establish Unreal Editor compilation, native automation tests, a player-visible scene, approved original story canon or a released product.
 
 ## Provenance and creative boundaries
 
