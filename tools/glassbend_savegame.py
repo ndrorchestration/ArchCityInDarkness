@@ -172,7 +172,8 @@ def load_preview_state(path: Path, quest: dict) -> dict:
     if envelope["quest_id"] != quest.get("quest_id"):
         raise ValueError("Save belongs to a different quest")
     digest = envelope["sha256"]
-    if not isinstance(digest, str) or len(digest) != 64:
+    if (not isinstance(digest, str) or len(digest) != 64
+            or any(char not in "0123456789abcdef" for char in digest)):
         raise ValueError("Invalid save checksum")
     body = {key: envelope[key] for key in ("schema_version", "quest_id", "state")}
     if not hmac.compare_digest(digest, hashlib.sha256(_canonical(body)).hexdigest()):
