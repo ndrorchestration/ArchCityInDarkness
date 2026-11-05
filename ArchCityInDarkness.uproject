@@ -1,13 +1,23 @@
 {
-  "FileVersion": 3,
-  "EngineAssociation": "5.8",
-  "Category": "Games",
-  "Description": "Original Columbus, Ohio supernatural urban RPG prototype",
-  "Modules": [
-    {
-      "Name": "ArchCityInDarkness",
-      "Type": "Runtime",
-      "LoadingPhase": "Default"
-    }
-  ]
+    "FileVersion":  3,
+    "EngineAssociation":  "5.8",
+    "Category":  "Games",
+    "Description":  "Original Columbus, Ohio supernatural urban RPG prototype",
+    "Modules":  [
+                    {
+                        "Name":  "ArchCityInDarkness",
+                        "Type":  "Runtime",
+                        "LoadingPhase":  "Default"
+                    }
+                ],
+    "Plugins":  [
+                    {
+                        "Name":  "PythonScriptPlugin",
+                        "Enabled":  true
+                    },
+                    {
+                        "Name":  "EditorScriptingUtilities",
+                        "Enabled":  true
+                    }
+                ]
 }
