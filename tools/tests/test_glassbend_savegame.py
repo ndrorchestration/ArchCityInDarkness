@@ -227,6 +227,17 @@ class LocalPreviewSaveTests(unittest.TestCase):
         self.assertIn("Load rejected; current game remains unchanged", out.getvalue())
         self.assertIn("Clues: shift_receipt", out.getvalue())
 
+    def test_non_ascii_checksum_is_rejected_without_losing_session(self):
+        self.save()
+        envelope = json.loads(self.path.read_text(encoding="utf-8"))
+        envelope["sha256"] = "é" * 64
+        self.rewrite(envelope)
+        with patch("builtins.input", side_effect=["1", "1", "1", "l", "q"]):
+            with contextlib.redirect_stdout(io.StringIO()) as out:
+                self.assertEqual(run_interactive(self.path), 0)
+        self.assertIn("Load rejected; current game remains unchanged", out.getvalue())
+        self.assertIn("Clues: shift_receipt", out.getvalue())
+
     def test_default_save_path_is_not_a_repo_file(self):
         path = default_save_path()
         self.assertEqual(path.name, "save_v1.json")
