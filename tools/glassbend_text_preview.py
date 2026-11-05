@@ -189,12 +189,25 @@ def run_demo() -> int:
     return 0
 
 
+def show_prelude() -> None:
+    print("\nARCH CITY IN DARKNESS — THE UNCLAIMED HOUR")
+    print("Glassbend, Columbus. After midnight.\n")
+    print("Rain threads through the shelter lights. Across the street, the archive is still open; "
+          "farther down, a bicycle lamp disappears toward the river.")
+    print("Hunger presses at the edge of your attention. The people sheltering nearby "
+          "have their own reasons to be out tonight; none owes you an answer.")
+    print("A pay envelope left beneath the timetable points to an hour that the schedule says never happened. "
+          "A worker is missing, and somebody may know why.")
+    print("Where you begin is up to you.\n")
+
+
 def run_interactive(save_file: Optional[Path] = None) -> int:
     session = make_session()
     save_file = Path(save_file) if save_file is not None else default_save_path()
     print("GLASSBEND: SOURCE-ONLY TEXT PREVIEW; noncanonical and NOT playable Unreal.")
     print("Choose a location/choice number; at the street menu, n=new, s=save, l=load, q=quit.")
     print("Local saves are opt-in; files are outside the public repository.")
+    show_prelude()
     anchors = list(ENTRY_LABELS.items())
     while True:
         print("\n" + session.state.summary())
@@ -212,6 +225,7 @@ def run_interactive(save_file: Optional[Path] = None) -> int:
             if confirmation == "y":
                 session = make_session()
                 print("New investigation started. Your saved file was not changed.")
+                show_prelude()
             else:
                 print("New investigation cancelled; current progress is unchanged.")
             continue
