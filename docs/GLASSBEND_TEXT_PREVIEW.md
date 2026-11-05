@@ -3,7 +3,10 @@
 **Status:** `PROTOTYPE_NOT_CANON` / `SOURCE_ONLY`. This is a portable, single-process Python narrative rehearsal of the original *The Unclaimed Hour* quest. It is intentionally not an Unreal map, packaged game, player controller, actor interaction, 3D rendering, production gameplay, C++ compilation or approved fiction.
 
 ## Why this exists
-While Unreal Editor/Live Coding is active and blocking external C++ compilation, M006 lets the game designer immediately try the actual source-defined dialogue and quest choices **without** fabricating in-engine readiness. It reuses the approved-for-review *contracts*, not the private historical Columbus in Darkness archive. Character/dialogue/story still require creator canon approval.
+M006 lets the game designer try the source-defined dialogue and quest choices while the in-engine slice is developed. It reuses the approved-for-review *contracts*, not the private historical Columbus in Darkness archive. Character/dialogue/story still require creator canon approval.
+
+## Opening and prelude
+The text rehearsal now opens in a fictional rain-soaked Glassbend after midnight. The scene establishes the protagonist's hunger, the shelter and archive, and the missing worker's unexplained hour, then leaves the first destination to the player. The proposed narration avoids specifying a protagonist name or backstory; it is provisional and awaiting creator review. It runs again when a new investigation is started. This is text-only narrative staging, not an Unreal cinematic, playable scene, or approved canon.
 
 ## Start the preview on Windows
 From a clean checkout of this isolated draft branch, using Python 3:
@@ -25,7 +28,7 @@ Each demonstration starts with a fresh in-memory state, follows a source-defined
 ## Verification evidence
 - `tools/tests/test_glassbend_text_preview.py` tests all three routes, missing prerequisites, duplicate actions, forged choice rejection, irreversible resolution, zero forced hunger mutation and drift rejection.
 - The source checker and portable Python suite must pass at this exact review head; the Windows terminal `--demo` output is **text evidence**, not UE PIE evidence.
-- Existing native gates M001-B Hunger, M002 Quest, and M004 Interaction remain **NOT_RUN** while Editor/Live Coding blocks external builds.
+- M001-B Hunger and M002 Quest passed named native tests on their respective exact review heads on November 5, 2026. M004 Interaction remains **NOT_RUN**; Python testing does not establish Unreal scene or interaction behavior.
 
 ## Later Unreal migration
 Use these choice nodes to prototype a real accessible UMG dialogue panel in a disposable Unreal scene **only after** earlier native and creator approvals. The actual UE client must separately enforce world-space distance/line of sight, target identity, keyboard/controller focus, captions and persistence. Pure Python outcome parity may help catch drift, but cannot prove C++ gameplay equivalence.
