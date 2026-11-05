@@ -45,6 +45,14 @@ class LocalPreviewSaveTests(unittest.TestCase):
             self.assertEqual(run_interactive(self.path), 0)
         self.assertFalse(self.path.exists())
 
+    def test_opening_introduces_investigation_before_player_chooses(self):
+        with patch("builtins.input", side_effect=["q"]), contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(run_interactive(self.path), 0)
+        opening = out.getvalue()
+        self.assertLess(opening.index("THE UNCLAIMED HOUR"), opening.index("Inspect the shelter pay envelope"))
+        self.assertIn("an hour that the schedule says never happened", opening)
+        self.assertFalse(self.path.exists())
+
     def test_unresolved_roundtrip_and_stable_clue_order(self):
         self.session.apply_action("ask_nico_about_route")
         self.session.apply_action("inspect_receipt")
