@@ -5,7 +5,7 @@ param(
     [string]$EngineRoot = 'C:\Program Files\Epic Games\UE_5.8',
     [string]$ProjectRoot = (Join-Path $PSScriptRoot '..'),
     [string]$PythonExecutable = 'python',
-    [ValidateSet('ArchCityInDarkness.Survival.Hunger.Contract', 'ArchCityInDarkness.Quest.Glassbend.Contract', 'ArchCityInDarkness.Interaction.Glassbend.Contract')]
+    [ValidateSet('ArchCityInDarkness.Survival.Hunger.Contract', 'ArchCityInDarkness.Quest.Glassbend.Contract', 'ArchCityInDarkness.Interaction.Glassbend.Contract', 'ArchCityInDarkness.Prelude.Glassbend.Contract')]
     [string[]]$Tests = @('ArchCityInDarkness.Survival.Hunger.Contract')
 )
 Set-StrictMode -Version Latest
@@ -74,6 +74,7 @@ try {
             'ArchCityInDarkness.Survival.Hunger.Contract' { 'Hunger' }
             'ArchCityInDarkness.Quest.Glassbend.Contract' { 'Quest' }
             'ArchCityInDarkness.Interaction.Glassbend.Contract' { 'Interaction' }
+            'ArchCityInDarkness.Prelude.Glassbend.Contract' { 'Prelude' }
         }
         $TestReport = Join-Path $ReportsRoot $ShortName
         $TestLog = Join-Path $Output "Editor-$ShortName.log"
