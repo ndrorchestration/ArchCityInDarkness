@@ -65,7 +65,10 @@ def validate_world_dialogue(source: dict[str, str]) -> list[str]:
     auto_actions = set(re.findall(r'FName\(TEXT\("([a-z_]+)"\)\)', selected_section))
     if auto_actions != EXPECTED_AUTO_ACTIONS:
         failures.append("World E key must perform clue collection ONLY, not route commits")
-    if any(action in selected_section for action in REQUIRED_EXPLICIT_ACTIONS):
+    # Ignore descriptive C++ comments; only executable action constructors matter.
+    code_only = re.sub(r"//[^\\n]*", "", selected_section)
+    if any(re.search(r'FName\\s*\\(\\s*TEXT\\("' + re.escape(action) + r'"\\)\\s*\\)',
+                     code_only) for action in REQUIRED_EXPLICIT_ACTIONS):
         failures.append("Implicit irreversible route action found in E selector")
     if not re.search(
         r'if\s*\(AnchorId == TEXT\("etta_quill"\)\)\s*return NAME_None\s*;',
