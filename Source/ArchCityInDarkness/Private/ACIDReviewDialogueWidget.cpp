@@ -8,6 +8,8 @@
 #include "Components/CanvasPanelSlot.h"
 #include "Components/TextBlock.h"
 #include "Components/VerticalBox.h"
+#include "Components/VerticalBoxSlot.h"
+#include "Components/ScrollBox.h"
 #include "Dom/JsonObject.h"
 #include "GameFramework/PlayerController.h"
 #include "InputCoreTypes.h"
@@ -35,13 +37,14 @@ void UACIDReviewDialogueChoiceButton::OnReviewChoiceClicked()
 void UACIDReviewDialogueWidget::NativeConstruct()
 {
     Super::NativeConstruct();
-    bIsFocusable = true;
+    SetIsFocusable(true);
 
     UCanvasPanel* Canvas = WidgetTree->ConstructWidget<UCanvasPanel>(UCanvasPanel::StaticClass());
     WidgetTree->RootWidget = Canvas;
 
     UBorder* Frame = WidgetTree->ConstructWidget<UBorder>(UBorder::StaticClass());
     Frame->SetBrushColor(FLinearColor(0.035f, 0.045f, 0.07f, 0.97f));
+    Frame->SetPadding(FMargin(20.0f, 16.0f));
     UCanvasPanelSlot* FrameSlot = Canvas->AddChildToCanvas(Frame);
     FrameSlot->SetAnchors(FAnchors(0.10f, 0.49f, 0.90f, 0.94f));
     FrameSlot->SetOffsets(FMargin(0, 0, 0, 0));
@@ -64,8 +67,10 @@ void UACIDReviewDialogueWidget::NativeConstruct()
     LineText->SetFont(LineFont);
     Column->AddChildToVerticalBox(LineText);
 
+    UScrollBox* ChoiceScroll = WidgetTree->ConstructWidget<UScrollBox>(UScrollBox::StaticClass());
+    Column->AddChildToVerticalBox(ChoiceScroll);
     ChoiceList = WidgetTree->ConstructWidget<UVerticalBox>(UVerticalBox::StaticClass());
-    Column->AddChildToVerticalBox(ChoiceList);
+    ChoiceScroll->AddChild(ChoiceList);
 }
 
 FString UACIDReviewDialogueWidget::ReadString(
@@ -149,6 +154,7 @@ bool UACIDReviewDialogueWidget::ShowSourceNode(const FString& NodeId)
         return false;
     }
 
+    FirstChoiceButton = nullptr;
     ChoiceList->ClearChildren();
     HeaderText->SetText(FText::FromString(
         FString::Printf(TEXT("GLASSBEND  |  %s  |  UNAPPROVED REVIEW TEXT"), *Speaker)));
@@ -178,10 +184,17 @@ bool UACIDReviewDialogueWidget::ShowSourceNode(const FString& NodeId)
         Label->SetFont(ChoiceFont);
         Label->SetText(FText::FromString(TEXT("> ") + Caption));
         Button->AddChild(Label);
+        Button->SetBackgroundColor(FLinearColor(0.18f, 0.22f, 0.30f, 1.0f));
         Button->BindReviewChoice(this, FName(*Id));
-        ChoiceList->AddChildToVerticalBox(Button);
+        UVerticalBoxSlot* ChoiceSlot = ChoiceList->AddChildToVerticalBox(Button);
+        ChoiceSlot->SetPadding(FMargin(4.0f, 6.0f));
+        if (!IsValid(FirstChoiceButton))
+        {
+            FirstChoiceButton = Button;
+        }
     }
     CurrentNodeId = NodeId;
+    FocusCurrentChoice();
     return true;
 }
 
@@ -223,6 +236,14 @@ bool UACIDReviewDialogueWidget::OpenFor(
     Player = Character;
     Anchor = Marker;
     return ShowSourceNode(EntryNode);
+}
+
+void UACIDReviewDialogueWidget::FocusCurrentChoice()
+{
+    if (IsValid(FirstChoiceButton))
+    {
+        FirstChoiceButton->SetKeyboardFocus();
+    }
 }
 
 void UACIDReviewDialogueWidget::SelectSourceChoice(FName ChoiceId)
@@ -324,5 +345,8 @@ void UACIDReviewDialogueWidget::CloseReviewDialogue()
     }
     Player.Reset();
     Anchor.Reset();
+    FirstChoiceButton = nullptr;
+    DialogueGraph.Reset();
+    CurrentNodeId.Empty();
     RemoveFromParent();
 }
