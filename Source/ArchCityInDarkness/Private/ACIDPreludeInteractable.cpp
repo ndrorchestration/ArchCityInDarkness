@@ -41,12 +41,16 @@ FName AACIDPreludeInteractable::SelectAction(const AACIDPreludeCharacter* Charac
         return Ledger->HasClue(TEXT("shift_receipt")) ? NAME_None : FName(TEXT("inspect_receipt"));
     if (AnchorId == TEXT("annex_badge"))
         return Ledger->HasClue(TEXT("annex_badge")) ? NAME_None : FName(TEXT("inspect_annex_badge"));
+    // In this review actor, E can discover a clue but MUST NEVER select an
+    // irreversible route by itself. The separately proposed M005 dialogue
+    // choices are not an Unreal UI; a later explicit, world-gated player
+    // selection must dispatch commit_dialogue/stealth/confrontation.
     if (AnchorId == TEXT("mara_vale"))
-        return Ledger->HasClue(TEXT("ledger_gap")) ? FName(TEXT("commit_dialogue")) : FName(TEXT("ask_mara_about_ledger"));
+        return Ledger->HasClue(TEXT("ledger_gap")) ? NAME_None : FName(TEXT("ask_mara_about_ledger"));
     if (AnchorId == TEXT("nico_bell"))
-        return Ledger->HasClue(TEXT("route_note")) ? FName(TEXT("commit_stealth")) : FName(TEXT("ask_nico_about_route"));
+        return Ledger->HasClue(TEXT("route_note")) ? NAME_None : FName(TEXT("ask_nico_about_route"));
     if (AnchorId == TEXT("etta_quill"))
-        return FName(TEXT("commit_confrontation"));
+        return NAME_None;
     return NAME_None;
 }
 

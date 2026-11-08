@@ -19,5 +19,9 @@ jobs:
         run: python tools/check_project_structure.py
       - name: Verify M008 receipt wiring (source-only, NOT Unreal)
         run: python tools/check_m008_source_readiness.py
+      - name: Verify proposed original dialogue graph contract (source-only)
+        run: python tools/validate_dialogue_contract.py
+      - name: Verify explicit player choice world source gate (not PIE)
+        run: python tools/check_m009_dialogue_world_contract.py
       - name: Verify native report parser using synthetic fixtures (not Unreal)
         run: python -m unittest discover -s tools/tests -p 'test_*.py' -v
