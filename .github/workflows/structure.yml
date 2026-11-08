@@ -17,5 +17,7 @@ jobs:
           python-version: '3.12'
       - name: Verify manifest and required sources (not Unreal compilation)
         run: python tools/check_project_structure.py
+      - name: Verify M008 receipt wiring (source-only, NOT Unreal)
+        run: python tools/check_m008_source_readiness.py
       - name: Verify native report parser using synthetic fixtures (not Unreal)
         run: python -m unittest discover -s tools/tests -p 'test_*.py' -v
