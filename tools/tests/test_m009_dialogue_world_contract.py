@@ -91,8 +91,10 @@ class M009DialogueWorldContractTests(unittest.TestCase):
 
     def test_no_extra_auto_action_rejected(self):
         self.sources[MARKER_CPP] = self.sources[MARKER_CPP].replace(
-            'return NAME_None;\n    return NAME_None;\n}',
-            'return FName(TEXT("commit_confrontation"));\n    return NAME_None;\n}', 1)
+            'if (AnchorId == TEXT("etta_quill"))',
+            'if (AnchorId == TEXT("etta_quill"))\n'
+            '        return FName(TEXT("rogue_action"));\n'
+            '    if (AnchorId == TEXT("etta_quill"))', 1)
         self.assertTrue(self.check())
 
 
