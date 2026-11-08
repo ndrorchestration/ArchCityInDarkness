@@ -129,3 +129,36 @@ executed in Unreal until a later real machine run.
 
 **Do not merge, publish, or call this playable until exact-head native
 compilation, observed PIE interaction and creator review are complete.**
+
+
+## Offline M011 follow-up: keyboard focus and blocked target selection
+
+Later source-only review identified two user-facing risks in the first UI candidate:
+
+1. A panel could receive focus without any response button being focused,
+   making keyboard-based review awkward or impossible.
+2. When multiple markers are near each other, an occluded nearest marker
+   could prevent the G dialogue from opening on another reachable marker.
+
+The draft now creates a scrollable choice list with padding, stores its first
+visible response button, calls FocusCurrentChoice after entering UI input mode,
+and focuses the next node's first response after graph navigation. Its G target
+scan checks CanReviewInteract on each candidate before choosing the nearest.
+
+These are **uncompiled source changes**, not verified visual/accessibility fixes.
+Native review must additionally check at 1280x720 and 1920x1080:
+- At G opening, the first response truly has keyboard focus and Enter/Space
+  activates the intended choice without unexpected movement.
+- Escape closes the panel both with and without a button focused, restoring
+  character control and mouse visibility.
+- Multi-choice nodes remain fully visible or scroll correctly with mouse,
+  keyboard and any supported controller navigation; padding and contrast are
+  checked against real rendered pixels, not assumed from C++ values.
+- Two markers in range with the nearest obscured still allow dialogue with a
+  visible reachable candidate; all side-effect clicks still independently
+  recheck world authorization and LOS.
+- M005 route and failure branches continue to work with the selected focus
+  moving to a valid new response. No auto-triggering of outcomes.
+
+This additional work deliberately does not edit the provisional dialogue
+writing or approve the camera, art or user-interface design.
