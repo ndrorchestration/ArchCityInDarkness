@@ -1,0 +1,439 @@
+{
+  "schema_version": 1,
+  "status": "PROTOTYPE_NOT_CANON",
+  "dialogue_id": "the_unclaimed_hour_dialogue",
+  "quest_id": "the_unclaimed_hour",
+  "layout_id": "glassbend_greybox_v1",
+  "interaction_model": "EXPLICIT_ACTION_IDS_ONLY",
+  "runtime_status": "NOT_IMPLEMENTED",
+  "localization_source_language": "en-US",
+  "entrypoints": [
+    {
+      "anchor_kind": "clue_spawn",
+      "anchor_id": "shift_receipt",
+      "node_id": "receipt_start"
+    },
+    {
+      "anchor_kind": "clue_spawn",
+      "anchor_id": "annex_badge",
+      "node_id": "badge_start"
+    },
+    {
+      "anchor_kind": "npc",
+      "anchor_id": "mara_vale",
+      "node_id": "mara_start"
+    },
+    {
+      "anchor_kind": "npc",
+      "anchor_id": "nico_bell",
+      "node_id": "nico_start"
+    },
+    {
+      "anchor_kind": "npc",
+      "anchor_id": "etta_quill",
+      "node_id": "etta_start"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "receipt_start",
+      "anchor_id": "shift_receipt",
+      "speaker_id": "narrator",
+      "line": "A pay envelope rests below the shelter timetable. One shift is marked twice, down to the minute.",
+      "choices": [
+        {
+          "id": "receipt_inspect",
+          "player_text": "Examine the printed receipt.",
+          "action_id": "inspect_receipt",
+          "on_success": "receipt_found",
+          "on_failure": "receipt_seen",
+          "close": false
+        },
+        {
+          "id": "receipt_leave",
+          "player_text": "Leave it undisturbed.",
+          "action_id": null,
+          "on_success": null,
+          "on_failure": null,
+          "close": true
+        }
+      ]
+    },
+    {
+      "id": "receipt_found",
+      "anchor_id": "shift_receipt",
+      "speaker_id": "narrator",
+      "line": "The worker was paid for an hour the schedule does not admit existed.",
+      "choices": [
+        {
+          "id": "receipt_found_close",
+          "player_text": "Pocket the detail and continue.",
+          "action_id": null,
+          "on_success": null,
+          "on_failure": null,
+          "close": true
+        }
+      ]
+    },
+    {
+      "id": "receipt_seen",
+      "anchor_id": "shift_receipt",
+      "speaker_id": "narrator",
+      "line": "You have already copied the relevant line. Nothing new is hidden in the envelope.",
+      "choices": [
+        {
+          "id": "receipt_seen_close",
+          "player_text": "Continue.",
+          "action_id": null,
+          "on_success": null,
+          "on_failure": null,
+          "close": true
+        }
+      ]
+    },
+    {
+      "id": "badge_start",
+      "anchor_id": "annex_badge",
+      "speaker_id": "narrator",
+      "line": "A visitor badge lies beside the transit annex service entrance. The date is tonight; its signature is missing.",
+      "choices": [
+        {
+          "id": "badge_inspect",
+          "player_text": "Read the discarded badge.",
+          "action_id": "inspect_annex_badge",
+          "on_success": "badge_found",
+          "on_failure": "badge_seen",
+          "close": false
+        },
+        {
+          "id": "badge_leave",
+          "player_text": "Leave it where it fell.",
+          "action_id": null,
+          "on_success": null,
+          "on_failure": null,
+          "close": true
+        }
+      ]
+    },
+    {
+      "id": "badge_found",
+      "anchor_id": "annex_badge",
+      "speaker_id": "narrator",
+      "line": "A faded annex stamp gives you a reason to question the night's security log.",
+      "choices": [
+        {
+          "id": "badge_found_close",
+          "player_text": "Remember the stamp.",
+          "action_id": null,
+          "on_success": null,
+          "on_failure": null,
+          "close": true
+        }
+      ]
+    },
+    {
+      "id": "badge_seen",
+      "anchor_id": "annex_badge",
+      "speaker_id": "narrator",
+      "line": "You've already recorded the badge details.",
+      "choices": [
+        {
+          "id": "badge_seen_close",
+          "player_text": "Return to the street.",
+          "action_id": null,
+          "on_success": null,
+          "on_failure": null,
+          "close": true
+        }
+      ]
+    },
+    {
+      "id": "mara_start",
+      "anchor_id": "mara_vale",
+      "speaker_id": "mara_vale",
+      "line": "The archive clock is six minutes slow. Mara closes a ledger when she notices you looking.",
+      "choices": [
+        {
+          "id": "mara_ask",
+          "player_text": "Ask why an hour is missing.",
+          "action_id": "ask_mara_about_ledger",
+          "on_success": "mara_ledger",
+          "on_failure": "mara_repeat",
+          "close": false
+        },
+        {
+          "id": "mara_resolve",
+          "player_text": "Offer the pay receipt and request a privacy-safe record.",
+          "action_id": "commit_dialogue",
+          "on_success": "mara_resolved",
+          "on_failure": "mara_missing",
+          "close": false
+        },
+        {
+          "id": "mara_leave",
+          "player_text": "Don't press the archivist.",
+          "action_id": null,
+          "on_success": null,
+          "on_failure": null,
+          "close": true
+        }
+      ]
+    },
+    {
+      "id": "mara_ledger",
+      "anchor_id": "mara_vale",
+      "speaker_id": "mara_vale",
+      "line": "Mara lowers her voice. 'The totals agree. The hour doesn't. Names stay behind this counter.'",
+      "choices": [
+        {
+          "id": "mara_ledger_back",
+          "player_text": "Ask a different question.",
+          "action_id": null,
+          "on_success": "mara_start",
+          "on_failure": null,
+          "close": false
+        },
+        {
+          "id": "mara_ledger_close",
+          "player_text": "Thank her and step away.",
+          "action_id": null,
+          "on_success": null,
+          "on_failure": null,
+          "close": true
+        }
+      ]
+    },
+    {
+      "id": "mara_repeat",
+      "anchor_id": "mara_vale",
+      "speaker_id": "mara_vale",
+      "line": "'I told you what I can without turning someone's shift into a public spectacle.'",
+      "choices": [
+        {
+          "id": "mara_repeat_back",
+          "player_text": "Return to the original question.",
+          "action_id": null,
+          "on_success": "mara_start",
+          "on_failure": null,
+          "close": false
+        },
+        {
+          "id": "mara_repeat_close",
+          "player_text": "Leave the counter.",
+          "action_id": null,
+          "on_success": null,
+          "on_failure": null,
+          "close": true
+        }
+      ]
+    },
+    {
+      "id": "mara_missing",
+      "anchor_id": "mara_vale",
+      "speaker_id": "mara_vale",
+      "line": "'A discrepancy is not proof. Bring me the paper trail before I put my signature on this.'",
+      "choices": [
+        {
+          "id": "mara_missing_close",
+          "player_text": "Look for more evidence.",
+          "action_id": null,
+          "on_success": null,
+          "on_failure": null,
+          "close": true
+        }
+      ]
+    },
+    {
+      "id": "mara_resolved",
+      "anchor_id": "mara_vale",
+      "speaker_id": "mara_vale",
+      "line": "Mara slides over a redacted shift log. 'Take the dates. Leave the people out of it.'",
+      "choices": [
+        {
+          "id": "mara_resolved_close",
+          "player_text": "Accept the evidence and leave.",
+          "action_id": null,
+          "on_success": null,
+          "on_failure": null,
+          "close": true
+        }
+      ]
+    },
+    {
+      "id": "nico_start",
+      "anchor_id": "nico_bell",
+      "speaker_id": "nico_bell",
+      "line": "Nico steadies his bicycle beneath a humming lamp. 'Nobody rides the last transfer unless they know what they're avoiding.'",
+      "choices": [
+        {
+          "id": "nico_ask",
+          "player_text": "Ask about the unofficial transfer route.",
+          "action_id": "ask_nico_about_route",
+          "on_success": "nico_route",
+          "on_failure": "nico_repeat",
+          "close": false
+        },
+        {
+          "id": "nico_resolve",
+          "player_text": "Observe the transfer without approaching anyone.",
+          "action_id": "commit_stealth",
+          "on_success": "nico_resolved",
+          "on_failure": "nico_missing",
+          "close": false
+        },
+        {
+          "id": "nico_leave",
+          "player_text": "Let the courier go.",
+          "action_id": null,
+          "on_success": null,
+          "on_failure": null,
+          "close": true
+        }
+      ]
+    },
+    {
+      "id": "nico_route",
+      "anchor_id": "nico_bell",
+      "speaker_id": "nico_bell",
+      "line": "'Use the low ramp by the river wall. Watch the delivery tray, not the riders.'",
+      "choices": [
+        {
+          "id": "nico_route_back",
+          "player_text": "Keep talking.",
+          "action_id": null,
+          "on_success": "nico_start",
+          "on_failure": null,
+          "close": false
+        },
+        {
+          "id": "nico_route_close",
+          "player_text": "Head toward the ramp.",
+          "action_id": null,
+          "on_success": null,
+          "on_failure": null,
+          "close": true
+        }
+      ]
+    },
+    {
+      "id": "nico_repeat",
+      "anchor_id": "nico_bell",
+      "speaker_id": "nico_bell",
+      "line": "'The route hasn't moved since we spoke. The city just makes it harder to see.'",
+      "choices": [
+        {
+          "id": "nico_repeat_close",
+          "player_text": "Return to the street.",
+          "action_id": null,
+          "on_success": null,
+          "on_failure": null,
+          "close": true
+        }
+      ]
+    },
+    {
+      "id": "nico_missing",
+      "anchor_id": "nico_bell",
+      "speaker_id": "nico_bell",
+      "line": "'You can't follow a transfer you haven't located. Ask me how the courier run changed.'",
+      "choices": [
+        {
+          "id": "nico_missing_back",
+          "player_text": "Ask about the route.",
+          "action_id": null,
+          "on_success": "nico_start",
+          "on_failure": null,
+          "close": false
+        },
+        {
+          "id": "nico_missing_close",
+          "player_text": "Look around first.",
+          "action_id": null,
+          "on_success": null,
+          "on_failure": null,
+          "close": true
+        }
+      ]
+    },
+    {
+      "id": "nico_resolved",
+      "anchor_id": "nico_bell",
+      "speaker_id": "narrator",
+      "line": "From cover, you photograph a misplaced timecard in the unattended drop tray. You leave without confronting a rider.",
+      "choices": [
+        {
+          "id": "nico_resolved_close",
+          "player_text": "Keep the photograph.",
+          "action_id": null,
+          "on_success": null,
+          "on_failure": null,
+          "close": true
+        }
+      ]
+    },
+    {
+      "id": "etta_start",
+      "anchor_id": "etta_quill",
+      "speaker_id": "etta_quill",
+      "line": "Etta stands behind the closed annex window. 'This office shut twenty minutes ago. Speak plainly.'",
+      "choices": [
+        {
+          "id": "etta_resolve",
+          "player_text": "Show the visitor badge and demand a nonviolent accounting.",
+          "action_id": "commit_confrontation",
+          "on_success": "etta_resolved",
+          "on_failure": "etta_missing",
+          "close": false
+        },
+        {
+          "id": "etta_leave",
+          "player_text": "Leave the annex undisturbed.",
+          "action_id": null,
+          "on_success": null,
+          "on_failure": null,
+          "close": true
+        }
+      ]
+    },
+    {
+      "id": "etta_missing",
+      "anchor_id": "etta_quill",
+      "speaker_id": "etta_quill",
+      "line": "'You have a suspicion, not an entry. Bring me something from this annex and we can discuss it.'",
+      "choices": [
+        {
+          "id": "etta_missing_close",
+          "player_text": "Search the side entrance.",
+          "action_id": null,
+          "on_success": null,
+          "on_failure": null,
+          "close": true
+        }
+      ]
+    },
+    {
+      "id": "etta_resolved",
+      "anchor_id": "etta_quill",
+      "speaker_id": "etta_quill",
+      "line": "Etta points to a box beside the counter. 'That discarded register isn't confidential. Take it. Then leave.'",
+      "choices": [
+        {
+          "id": "etta_resolved_close",
+          "player_text": "Take the register without violence.",
+          "action_id": null,
+          "on_success": null,
+          "on_failure": null,
+          "close": true
+        }
+      ]
+    }
+  ],
+  "constraints": {
+    "original_dialogue_only": true,
+    "all_routes_nonlethal": true,
+    "no_forced_feeding": true,
+    "all_lines_captionable": true,
+    "no_voice_asset_claim": true,
+    "no_player_world_gate_claim": true
+  }
+}
