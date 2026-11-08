@@ -241,7 +241,8 @@ void AACIDPreludeCharacter::OpenGraphDialogue()
     UIInput.SetWidgetToFocus(Widget->TakeWidget());
     PC->SetInputMode(UIInput);
     PC->bShowMouseCursor = true;
-    Widget->SetKeyboardFocus();
+    // Focus the first actual choice for keyboard/gamepad review, not the frame.
+    Widget->FocusCurrentChoice();
 }
 
 void AACIDPreludeCharacter::EndGraphDialogue(UACIDReviewDialogueWidget* Source)
