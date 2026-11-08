@@ -1,5 +1,7 @@
 #include "ACIDPreludeCharacter.h"
 #include "ACIDPreludeInteractable.h"
+#include "ACIDReviewDialogueWidget.h"
+#include "GameFramework/PlayerController.h"
 #include "ACIDHungerComponent.h"
 #include "ACIDQuestLedgerComponent.h"
 #include "Camera/CameraComponent.h"
@@ -31,7 +33,7 @@ void AACIDPreludeCharacter::BeginPlay()
     Super::BeginPlay();
     PrintReviewText(TEXT("ARCH CITY IN DARKNESS | GLASSBEND, AFTER MIDNIGHT\n"
         "Rain over the shelter. A worker is missing and an hour is unaccounted for.\n"
-        "WASD move | Mouse look | E clue | F talk | Enter confirm | Escape cancel | Tab status.\n"
+        "WASD move | Mouse look | E clue | F diagnostic | G captioned choices | Enter/Escape | Tab status.\n"
         "Review-only greybox, original provisional story. No forced feeding."));
 }
 
@@ -48,6 +50,7 @@ void AACIDPreludeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
     PlayerInputComponent->BindAction(TEXT("ReviewDialogueOpen"), IE_Pressed, this, &AACIDPreludeCharacter::OpenReviewDialogue);
     PlayerInputComponent->BindAction(TEXT("ReviewDialogueConfirm"), IE_Pressed, this, &AACIDPreludeCharacter::ConfirmReviewDialogue);
     PlayerInputComponent->BindAction(TEXT("ReviewDialogueCancel"), IE_Pressed, this, &AACIDPreludeCharacter::CancelReviewDialogue);
+    PlayerInputComponent->BindAction(TEXT("ReviewGraphOpen"), IE_Pressed, this, &AACIDPreludeCharacter::OpenGraphDialogue);
 }
 
 void AACIDPreludeCharacter::MoveForward(float Value)
@@ -176,6 +179,82 @@ void AACIDPreludeCharacter::CancelReviewDialogue()
 {
     ActiveReviewDialogueMarker.Reset();
     PrintReviewText(TEXT("Review dialogue canceled. No quest outcome selected."));
+}
+
+
+void AACIDPreludeCharacter::OpenGraphDialogue()
+{
+    if (IsValid(ActiveGraphWidget))
+    {
+        PrintReviewText(TEXT("Already reviewing a source dialogue."));
+        return;
+    }
+    ActiveReviewDialogueMarker.Reset();
+    if (!IsLocallyControlled() || !GetWorld() || !IsValid(QuestLedger) ||
+        QuestLedger->GetPhase() != EACIDQuestPhase::Investigating)
+    {
+        PrintReviewText(TEXT("Cannot open captioned source dialogue in this state."));
+        return;
+    }
+
+    AACIDPreludeInteractable* Nearest = nullptr;
+    float BestDistance = FMath::Square(275.0f);
+    for (TActorIterator<AACIDPreludeInteractable> It(GetWorld()); It; ++It)
+    {
+        // A nearer blocked marker must not hide another reachable dialogue.
+        // Every candidate is checked against the same native world/LOS gate.
+        if (!It->CanReviewInteract(this)) continue;
+        const float Distance = FVector::DistSquared(GetActorLocation(), It->GetActorLocation());
+        if (Distance < BestDistance)
+        {
+            BestDistance = Distance;
+            Nearest = *It;
+        }
+    }
+    if (!IsValid(Nearest) || !Nearest->CanReviewInteract(this))
+    {
+        PrintReviewText(TEXT("No visible source-dialogue marker within 2.75m."));
+        return;
+    }
+    APlayerController* PC = Cast<APlayerController>(GetController());
+    if (!IsValid(PC))
+    {
+        PrintReviewText(TEXT("A player controller is required for UMG review."));
+        return;
+    }
+
+    ActiveReviewDialogueMarker = Nearest;
+    UACIDReviewDialogueWidget* Widget =
+        CreateWidget<UACIDReviewDialogueWidget>(PC, UACIDReviewDialogueWidget::StaticClass());
+    if (!IsValid(Widget))
+    {
+        ActiveReviewDialogueMarker.Reset();
+        PrintReviewText(TEXT("Unable to construct local source-dialogue review widget."));
+        return;
+    }
+    ActiveGraphWidget = Widget;
+    Widget->AddToViewport(30);
+    if (!Widget->OpenFor(this, Nearest))
+    {
+        Widget->CloseReviewDialogue();
+        PrintReviewText(TEXT("Source dialogue missing or invalid; no quest action performed."));
+        return;
+    }
+    FInputModeUIOnly UIInput;
+    UIInput.SetWidgetToFocus(Widget->TakeWidget());
+    PC->SetInputMode(UIInput);
+    PC->bShowMouseCursor = true;
+    // Focus the first actual choice for keyboard/gamepad review, not the frame.
+    Widget->FocusCurrentChoice();
+}
+
+void AACIDPreludeCharacter::EndGraphDialogue(UACIDReviewDialogueWidget* Source)
+{
+    if (ActiveGraphWidget.Get() == Source)
+    {
+        ActiveGraphWidget = nullptr;
+        ActiveReviewDialogueMarker.Reset();
+    }
 }
 
 void AACIDPreludeCharacter::ShowStatus()

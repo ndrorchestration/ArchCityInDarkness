@@ -164,3 +164,47 @@ bool AACIDPreludeInteractable::TryCommitReviewChoice(
     // The quest ledger itself enforces prerequisite clues and only one ending.
     return UACIDQuestInteractionBridge::TryApplyAction(Ledger, Action);
 }
+
+FName AACIDPreludeInteractable::ActionForDialogueChoice(
+    FName CandidateAnchor, FName ChoiceId)
+{
+    // Exact existing M005 node/action pairs. Unexpected choices fail closed.
+    if (CandidateAnchor == TEXT("shift_receipt") && ChoiceId == TEXT("receipt_inspect"))
+        return FName(TEXT("inspect_receipt"));
+    if (CandidateAnchor == TEXT("annex_badge") && ChoiceId == TEXT("badge_inspect"))
+        return FName(TEXT("inspect_annex_badge"));
+    if (CandidateAnchor == TEXT("mara_vale") && ChoiceId == TEXT("mara_ask"))
+        return FName(TEXT("ask_mara_about_ledger"));
+    if (CandidateAnchor == TEXT("mara_vale") && ChoiceId == TEXT("mara_resolve"))
+        return FName(TEXT("commit_dialogue"));
+    if (CandidateAnchor == TEXT("nico_bell") && ChoiceId == TEXT("nico_ask"))
+        return FName(TEXT("ask_nico_about_route"));
+    if (CandidateAnchor == TEXT("nico_bell") && ChoiceId == TEXT("nico_resolve"))
+        return FName(TEXT("commit_stealth"));
+    if (CandidateAnchor == TEXT("etta_quill") && ChoiceId == TEXT("etta_resolve"))
+        return FName(TEXT("commit_confrontation"));
+    return NAME_None;
+}
+
+bool AACIDPreludeInteractable::TryApplyReviewDialogueChoice(
+    AACIDPreludeCharacter* Character, FName ChoiceId)
+{
+    // An open, still-current source-dialogue session is necessary but not
+    // sufficient. Revalidate ALL physical and quest gates at each action.
+    if (!IsKnownAnchor(AnchorId) || !CanReviewInteract(Character) ||
+        !Character->IsReviewDialogueActiveFor(this))
+    {
+        return false;
+    }
+    UACIDQuestLedgerComponent* Ledger = Character->GetQuestLedger();
+    if (!IsValid(Ledger) || Ledger->GetPhase() != EACIDQuestPhase::Investigating)
+    {
+        return false;
+    }
+    const FName Action = ActionForDialogueChoice(AnchorId, ChoiceId);
+    if (Action.IsNone())
+    {
+        return false;
+    }
+    return UACIDQuestInteractionBridge::TryApplyAction(Ledger, Action);
+}

@@ -37,6 +37,12 @@ public:
 
     /** Requires the active dialogue session and in-world interaction gates. */
     bool TryCommitReviewChoice(AACIDPreludeCharacter* Character, FName ChoiceId);
+
+    /** Fixed original M005 choice mapping; never accepts arbitrary action IDs. */
+    static FName ActionForDialogueChoice(FName CandidateAnchor, FName ChoiceId);
+
+    /** Called only after the active M005 node/choice is checked by the review UI. */
+    bool TryApplyReviewDialogueChoice(AACIDPreludeCharacter* Character, FName ChoiceId);
 private:
     FName SelectAction(const AACIDPreludeCharacter* Character) const;
 };

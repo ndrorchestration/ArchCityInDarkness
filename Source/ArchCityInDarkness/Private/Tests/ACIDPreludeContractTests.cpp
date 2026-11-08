@@ -42,6 +42,39 @@ bool FACIDPreludeContract::RunTest(const FString& Parameters)
     TestEqual(TEXT("Raw action ID cannot be a choice"),
         AACIDPreludeInteractable::ReviewChoiceActionForAnchor(
             TEXT("mara_vale"), TEXT("commit_dialogue")), NAME_None);
+    // Proposed M011 graph data: seven source-graph choice IDs must resolve to
+    // the correct allowlisted action only. These are UNEXECUTED native tests
+    // until a real Unreal 5.8.4 build and test run proves otherwise.
+    TestEqual(TEXT("Receipt dialogue choice"),
+        AACIDPreludeInteractable::ActionForDialogueChoice(
+            TEXT("shift_receipt"), TEXT("receipt_inspect")), FName(TEXT("inspect_receipt")));
+    TestEqual(TEXT("Badge dialogue choice"),
+        AACIDPreludeInteractable::ActionForDialogueChoice(
+            TEXT("annex_badge"), TEXT("badge_inspect")), FName(TEXT("inspect_annex_badge")));
+    TestEqual(TEXT("Mara clue choice"),
+        AACIDPreludeInteractable::ActionForDialogueChoice(
+            TEXT("mara_vale"), TEXT("mara_ask")), FName(TEXT("ask_mara_about_ledger")));
+    TestEqual(TEXT("Mara route choice"),
+        AACIDPreludeInteractable::ActionForDialogueChoice(
+            TEXT("mara_vale"), TEXT("mara_resolve")), FName(TEXT("commit_dialogue")));
+    TestEqual(TEXT("Nico clue choice"),
+        AACIDPreludeInteractable::ActionForDialogueChoice(
+            TEXT("nico_bell"), TEXT("nico_ask")), FName(TEXT("ask_nico_about_route")));
+    TestEqual(TEXT("Nico route choice"),
+        AACIDPreludeInteractable::ActionForDialogueChoice(
+            TEXT("nico_bell"), TEXT("nico_resolve")), FName(TEXT("commit_stealth")));
+    TestEqual(TEXT("Etta route choice"),
+        AACIDPreludeInteractable::ActionForDialogueChoice(
+            TEXT("etta_quill"), TEXT("etta_resolve")), FName(TEXT("commit_confrontation")));
+    TestEqual(TEXT("Mismatched dialogue actor fails closed"),
+        AACIDPreludeInteractable::ActionForDialogueChoice(
+            TEXT("nico_bell"), TEXT("mara_resolve")), NAME_None);
+    TestEqual(TEXT("Raw action string is not a dialogue choice"),
+        AACIDPreludeInteractable::ActionForDialogueChoice(
+            TEXT("mara_vale"), TEXT("commit_dialogue")), NAME_None);
+    TestFalse(TEXT("Source widget cannot commit with null character"),
+        GetMutableDefault<AACIDPreludeInteractable>()->TryApplyReviewDialogueChoice(
+            nullptr, TEXT("mara_resolve")));
     TestFalse(TEXT("No pending player can resolve on default marker"),
         GetMutableDefault<AACIDPreludeInteractable>()->TryCommitReviewChoice(
             nullptr, TEXT("mara_resolve")));
