@@ -119,9 +119,13 @@ class M010ExplicitInputSourceTests(unittest.TestCase):
         self.assertTrue(self.errors())
 
     def test_native_candidate_tests_required(self):
-        self.mutate(NATIVE_TEST,
-                    'TEXT("etta_quill"), TEXT("etta_resolve")',
-                    'TEXT("etta_quill"), TEXT("unrelated_resolve")')
+        # M011 appends another native assertion for the same choice ID; remove
+        # every copy to prove the M010 requirement cannot be accidentally
+        # satisfied by a newer duplicate source assertion.
+        before = 'TEXT("etta_quill"), TEXT("etta_resolve")'
+        self.assertIn(before, self.source[NATIVE_TEST])
+        self.source[NATIVE_TEST] = self.source[NATIVE_TEST].replace(
+            before, 'TEXT("etta_quill"), TEXT("unrelated_resolve")')
         self.assertTrue(self.errors())
 
     def test_review_session_must_be_weak(self):
