@@ -126,6 +126,8 @@ def validate_m011(source: dict[str, str]) -> list[str]:
         issues.append("Player input mode must focus first source response")
     if "UScrollBox" not in wcpp or "ChoiceScroll->AddChild(ChoiceList)" not in wcpp:
         issues.append("Long response lists must be scrollable")
+    if "if (!It->CanReviewInteract(this)) continue;" not in opening:
+        issues.append("G target selection must skip occluded/out-of-range markers")
     if "Frame->SetPadding(" not in wcpp:
         issues.append("Caption review frame must have interior padding")
     focus = section(wcpp, "void UACIDReviewDialogueWidget::FocusCurrentChoice()")
