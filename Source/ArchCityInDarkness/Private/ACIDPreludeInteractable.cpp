@@ -88,3 +88,79 @@ bool AACIDPreludeInteractable::TryInteract(AACIDPreludeCharacter* Character)
     }
     return UACIDQuestInteractionBridge::TryApplyAction(Character->GetQuestLedger(), Action);
 }
+
+bool AACIDPreludeInteractable::IsReviewDialogueNPC() const
+{
+    return AnchorId == TEXT("mara_vale") || AnchorId == TEXT("nico_bell") ||
+        AnchorId == TEXT("etta_quill");
+}
+
+FName AACIDPreludeInteractable::GetReviewChoiceId() const
+{
+    if (AnchorId == TEXT("mara_vale")) return FName(TEXT("mara_resolve"));
+    if (AnchorId == TEXT("nico_bell")) return FName(TEXT("nico_resolve"));
+    if (AnchorId == TEXT("etta_quill")) return FName(TEXT("etta_resolve"));
+    return NAME_None;
+}
+
+FName AACIDPreludeInteractable::ReviewChoiceActionForAnchor(FName CandidateAnchor, FName CandidateChoice)
+{
+    // Exact original M005 IDs. Do not expose generic action-ID dispatch from input.
+    if (CandidateAnchor == TEXT("mara_vale") && CandidateChoice == TEXT("mara_resolve"))
+        return FName(TEXT("commit_dialogue"));
+    if (CandidateAnchor == TEXT("nico_bell") && CandidateChoice == TEXT("nico_resolve"))
+        return FName(TEXT("commit_stealth"));
+    if (CandidateAnchor == TEXT("etta_quill") && CandidateChoice == TEXT("etta_resolve"))
+        return FName(TEXT("commit_confrontation"));
+    return NAME_None;
+}
+
+bool AACIDPreludeInteractable::CanReviewInteract(const AACIDPreludeCharacter* Character) const
+{
+    if (!IsKnownAnchor(AnchorId) || !IsValid(Character) || !Character->IsPlayerControlled() ||
+        GetWorld() == nullptr || Character->GetWorld() != GetWorld() ||
+        GetWorld()->GetNetMode() != NM_Standalone)
+    {
+        return false;
+    }
+
+    // The same range, height and line-of-sight conditions are checked again
+    // at confirmation. Opening a session never grants persistent authorization.
+    constexpr float MaxDistanceCm = 275.0f;
+    if (FVector::DistSquared2D(Character->GetActorLocation(), GetActorLocation()) >
+        FMath::Square(MaxDistanceCm) ||
+        FMath::Abs(Character->GetActorLocation().Z - GetActorLocation().Z) > 200.0f)
+    {
+        return false;
+    }
+    FHitResult Hit;
+    FCollisionQueryParams Params(SCENE_QUERY_STAT(GlassbendReviewConfirm), false);
+    Params.AddIgnoredActor(Character);
+    const FVector Eyes = Character->GetPawnViewLocation();
+    const FVector Target = GetActorLocation() + FVector(0, 0, 85);
+    const bool Blocked = GetWorld()->LineTraceSingleByChannel(
+        Hit, Eyes, Target, ECC_Visibility, Params);
+    return !Blocked || Hit.GetActor() == this;
+}
+
+bool AACIDPreludeInteractable::TryCommitReviewChoice(
+    AACIDPreludeCharacter* Character, FName ChoiceId)
+{
+    if (!IsReviewDialogueNPC() || !CanReviewInteract(Character) ||
+        !Character->IsReviewDialogueActiveFor(this))
+    {
+        return false;
+    }
+    UACIDQuestLedgerComponent* Ledger = Character->GetQuestLedger();
+    if (!IsValid(Ledger) || Ledger->GetPhase() != EACIDQuestPhase::Investigating)
+    {
+        return false;
+    }
+    const FName Action = ReviewChoiceActionForAnchor(AnchorId, ChoiceId);
+    if (Action.IsNone())
+    {
+        return false;
+    }
+    // The quest ledger itself enforces prerequisite clues and only one ending.
+    return UACIDQuestInteractionBridge::TryApplyAction(Ledger, Action);
+}
