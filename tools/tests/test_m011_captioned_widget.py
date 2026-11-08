@@ -133,6 +133,11 @@ class M011CaptionedWidgetContractTests(unittest.TestCase):
         self.mutate(WIDGET_CPP, "Frame->SetPadding(", "Frame->SetUnrelatedPadding(")
         self.assertTrue(self.errors())
 
+    def test_nearest_blocked_marker_does_not_hide_reachable_dialogue(self):
+        self.mutate(PLAYER_CPP, "if (!It->CanReviewInteract(this)) continue;",
+                    "if (!IsValid(*It)) continue;")
+        self.assertTrue(self.errors())
+
     def test_native_source_choice_assertions_required(self):
         self.mutate(NATIVE_TEST,
                     'TEXT("nico_bell"), TEXT("nico_ask")',
