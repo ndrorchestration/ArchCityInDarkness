@@ -23,5 +23,7 @@ jobs:
         run: python tools/validate_dialogue_contract.py
       - name: Verify explicit player choice world source gate (not PIE)
         run: python tools/check_m009_dialogue_world_contract.py
+      - name: Verify explicit review session and fixed choice dispatch (source-only)
+        run: python tools/check_m010_explicit_review_input.py
       - name: Verify native report parser using synthetic fixtures (not Unreal)
         run: python -m unittest discover -s tools/tests -p 'test_*.py' -v
