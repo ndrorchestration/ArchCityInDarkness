@@ -201,6 +201,9 @@ void AACIDPreludeCharacter::OpenGraphDialogue()
     float BestDistance = FMath::Square(275.0f);
     for (TActorIterator<AACIDPreludeInteractable> It(GetWorld()); It; ++It)
     {
+        // A nearer blocked marker must not hide another reachable dialogue.
+        // Every candidate is checked against the same native world/LOS gate.
+        if (!It->CanReviewInteract(this)) continue;
         const float Distance = FVector::DistSquared(GetActorLocation(), It->GetActorLocation());
         if (Distance < BestDistance)
         {
