@@ -114,6 +114,25 @@ class M011CaptionedWidgetContractTests(unittest.TestCase):
                     "true")
         self.assertTrue(self.errors())
 
+    def test_first_response_keyboard_focus_required(self):
+        self.mutate(WIDGET_CPP, "FirstChoiceButton->SetKeyboardFocus()",
+                    "FirstChoiceButton->SetToolTipText(FText::GetEmpty())")
+        self.assertTrue(self.errors())
+
+    def test_scrollable_response_list_required(self):
+        self.mutate(WIDGET_CPP, "ChoiceScroll->AddChild(ChoiceList)",
+                    "Column->AddChildToVerticalBox(ChoiceList)")
+        self.assertTrue(self.errors())
+
+    def test_keyboard_focus_must_leave_parent_panel(self):
+        self.mutate(PLAYER_CPP, "Widget->FocusCurrentChoice()",
+                    "Widget->SetKeyboardFocus()")
+        self.assertTrue(self.errors())
+
+    def test_dialogue_frame_padding_required(self):
+        self.mutate(WIDGET_CPP, "Frame->SetPadding(", "Frame->SetUnrelatedPadding(")
+        self.assertTrue(self.errors())
+
     def test_native_source_choice_assertions_required(self):
         self.mutate(NATIVE_TEST,
                     'TEXT("nico_bell"), TEXT("nico_ask")',
