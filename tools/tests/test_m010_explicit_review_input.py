@@ -22,6 +22,15 @@ class M010ExplicitInputSourceTests(unittest.TestCase):
         self.assertIn(old, self.source[path], "Test fixture unexpectedly changed")
         self.source[path] = self.source[path].replace(old, new, 1)
 
+    def mutate_in_fn(self, path, signature, old, new):
+        original = self.source[path]
+        start = original.index(signature)
+        end = original.find("\n}\n", start)
+        self.assertNotEqual(end, -1)
+        body = original[start:end]
+        self.assertIn(old, body, "Expected dispatch gate source missing")
+        self.source[path] = original[:start] + body.replace(old, new, 1) + original[end:]
+
     def test_review_diagnostic_input_wiring(self):
         self.assertEqual([], self.errors())
 
@@ -80,16 +89,14 @@ class M010ExplicitInputSourceTests(unittest.TestCase):
         self.assertTrue(self.errors())
 
     def test_dispatch_no_range_check_fails(self):
-        self.mutate(ACTOR, "MaxDistanceCm = 275.0f", "MaxDistanceCm = 750.0f")
+        self.mutate_in_fn(ACTOR, "bool AACIDPreludeInteractable::CanReviewInteract(",
+                          "MaxDistanceCm = 275.0f", "MaxDistanceCm = 750.0f")
         self.assertTrue(self.errors())
 
     def test_dispatch_no_visibility_check_fails(self):
-        self.mutate(ACTOR, "ECC_Visibility", "ECC_Camera")
-        # First occurrence is the marker's collision setup, not the gate.
-        # Remove from the gate explicitly for meaningful mutation.
-        self.mutate(ACTOR,
-                    "Target, ECC_Visibility, Params",
-                    "Target, ECC_Camera, Params")
+        self.mutate_in_fn(ACTOR, "bool AACIDPreludeInteractable::CanReviewInteract(",
+                          "Target, ECC_Visibility, Params",
+                          "Target, ECC_Camera, Params")
         self.assertTrue(self.errors())
 
     def test_wrong_route_choice_fails(self):
