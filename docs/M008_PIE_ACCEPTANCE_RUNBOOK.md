@@ -83,3 +83,46 @@ Local evidence stays ignored/private unless explicitly authorized for release.
 Do not upload private LARP messages, copyrighted Bloodlines franchise
 expression, unrelated TSTSS data or unlicensed art. Keep all associated PRs
 draft and unmerged until verified and reviewed.
+
+
+## Five-shot visual capture packet (only when Neontic is connected)
+
+The visual packet is a review tool, not additional canon or evidence that
+M008 already passed. In real native Play-in-Editor with GPU rendering, capture
+five distinct PNG frames at 1280x720 or greater:
+
+| Role | Composition | What reviewer can and cannot conclude |
+| --- | --- | --- |
+| arrival | Glassbend shelter and nighttime streetscape | Scale, lighting, legibility; cannot establish movement |
+| receipt_before | Uncollected receipt, initial clue/status text | Before-state; confirm in the native log |
+| out_of_range | Receipt from outside the 2.75m gate | Pair with a native negative-action log |
+| occluded | Solid wall blocks receipt from character view | Pair with native line-trace and unchanged-clue log |
+| receipt_after | Receipt interaction accepted, Tab displays shift_receipt | Compare HUD to actual native quest log |
+
+A screenshot of another application, offline renderer, concept image, or NullRHI
+frame must NOT be labeled Unreal PIE. Confirm the real human keyboard/mouse
+sequence and scene changes in PIE; still images alone are insufficient.
+
+After genuine screenshots are captured, place the original PNGs in the ignored
+Saved/ArchCityVerification/M008 folder. From a clean review checkout in
+PowerShell, run the following single command (with actual filenames):
+
+    python tools/build_m008_capture_receipt.py --project-root . --engine-build-version "C:\Program Files\Epic Games\UE_5.8\Engine\Build\Build.version" --shot "arrival=Saved\ArchCityVerification\M008\arrival.png" --shot "receipt_before=Saved\ArchCityVerification\M008\receipt_before.png" --shot "out_of_range=Saved\ArchCityVerification\M008\out_of_range.png" --shot "occluded=Saved\ArchCityVerification\M008\occluded.png" --shot "receipt_after=Saved\ArchCityVerification\M008\receipt_after.png" --attest-native-pie
+
+The tool does not take screenshots. It checks PNG chunk structure, CRCs,
+minimum 1280x720 resolution, computes SHA-256 hashes, and reads installed
+engine version and Git HEAD. It saves a local JSON receipt under Saved/,
+rejects out-of-tree files and will not overwrite an older receipt.
+Human attestation is not independent proof of native PIE origin.
+
+Even with all five roles, receipt status is
+CAPTURE_SET_COMPLETE_UNREVIEWED, NOT M008_PIE_PASS. Review real native
+interaction logs and content before marking any acceptance criteria.
+No private machine identifiers or logs are to be published.
+
+### Visual-quality follow-on (separate from M008 functional acceptance)
+
+At 1080p inspect ground traversal readability, building scale, lighting,
+clue visibility, foreground contrast and separation of interactive markers
+from decoration. Use DRAFT / NEEDS_WORK / REVIEWED notes only; creator must
+approve future artistic direction. Engine primitives are not production art.
