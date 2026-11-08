@@ -120,6 +120,17 @@ def validate_m011(source: dict[str, str]) -> list[str]:
 
     if "class ARCHCITYINDARKNESS_API UACIDReviewDialogueWidget : public UUserWidget" not in wh:
         issues.append("UMG user widget class missing")
+    if "void FocusCurrentChoice();" not in wh or "FirstChoiceButton" not in wh:
+        issues.append("Accessible first response focus contract missing")
+    if "Widget->FocusCurrentChoice()" not in opening:
+        issues.append("Player input mode must focus first source response")
+    if "UScrollBox" not in wcpp or "ChoiceScroll->AddChild(ChoiceList)" not in wcpp:
+        issues.append("Long response lists must be scrollable")
+    if "Frame->SetPadding(" not in wcpp:
+        issues.append("Caption review frame must have interior padding")
+    focus = section(wcpp, "void UACIDReviewDialogueWidget::FocusCurrentChoice()")
+    if "FirstChoiceButton->SetKeyboardFocus()" not in focus:
+        issues.append("FocusCurrentChoice must focus a visible actual choice button")
     if "class ARCHCITYINDARKNESS_API UACIDReviewDialogueChoiceButton : public UButton" not in wh:
         issues.append("Per-choice clickable button class missing")
 
