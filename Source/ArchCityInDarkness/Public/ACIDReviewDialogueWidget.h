@@ -43,6 +43,8 @@ public:
     /** Call after AddToViewport; only operates on a verified active NPC/prop session. */
     bool OpenFor(AACIDPreludeCharacter* Character, AACIDPreludeInteractable* Marker);
     void SelectSourceChoice(FName ChoiceId);
+    /** Focus an actual response button, not the parent panel, for keyboard use. */
+    void FocusCurrentChoice();
     void CloseReviewDialogue();
 
 protected:
@@ -58,6 +60,9 @@ private:
 
     UPROPERTY(Transient)
     TObjectPtr<UVerticalBox> ChoiceList;
+
+    UPROPERTY(Transient)
+    TObjectPtr<UACIDReviewDialogueChoiceButton> FirstChoiceButton;
 
     TWeakObjectPtr<AACIDPreludeCharacter> Player;
     TWeakObjectPtr<AACIDPreludeInteractable> Anchor;
