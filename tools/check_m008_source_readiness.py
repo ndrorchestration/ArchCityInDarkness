@@ -75,11 +75,18 @@ def check_sources(source: dict[str, str], map_present: bool) -> list[str]:
     for anchor in ANCHORS:
         if marker.count(f'Candidate == TEXT("{anchor}")') != 1:
             problems.append(f"Anchor missing or duplicated: {anchor}")
+    # Scope M008 guards to the ORIGINAL E dispatch function. M010 adds
+    # a separate confirmation recheck; that second function must never mask
+    # an accidentally deleted first-E authorization/range/visibility gate.
+    signature = "bool AACIDPreludeInteractable::TryInteract("
+    dispatch = (marker.split(signature, 1)[1].split("\n}\n", 1)[0]
+                if signature in marker else "")
     for gate in GATES:
-        if gate not in marker:
-            problems.append(f"Missing interaction gate or receipt action: {gate}")
-    if "MaxDistanceCm = 275.0f" not in marker:
-        problems.append("Exact 2.75m dispatch distance gate changed")
+        scope = marker if gate == 'FName(TEXT("inspect_receipt"))' else dispatch
+        if gate not in scope:
+            problems.append(f"Missing E interaction gate or receipt action: {gate}")
+    if "MaxDistanceCm = 275.0f" not in dispatch:
+        problems.append("Exact 2.75m E dispatch distance gate changed")
     if not re.search(RECEIPT_SELECTION, marker):
         problems.append("Receipt selection/duplicate guard source path drifted")
     if not re.search(RECEIPT_BRIDGE, bridge):
