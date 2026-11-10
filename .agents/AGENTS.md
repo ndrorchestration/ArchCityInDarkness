@@ -1,6 +1,8 @@
 # ACID-HIP v0.1 — supervised pilot instructions
 
-**Namespace:** ACID-HIP = Arch City in Darkness Handoff Interoperability Pilot. ACP is reserved exclusively for the separate Agent Control Plane architecture. Historical mentions of ACP-PILOT-001 in old notes and PR links refer to ACID-HIP-001; do not interpret them as ACP work.\n\nStatus: DRAFT / NON-OPERATIONAL. This file describes a proposed interoperability pilot; it does not grant any tool permission, initiate agents, or imply an approved game feature.
+**Namespace:** ACID-HIP = Arch City in Darkness Handoff Interoperability Pilot. ACP is reserved exclusively for the separate Agent Control Plane architecture. Historical mentions of ACP-PILOT-001 in old notes and PR links refer to ACID-HIP-001; do not interpret them as ACP work.
+
+Status: DRAFT / NON-OPERATIONAL. This file describes a proposed interoperability pilot; it does not grant any tool permission, initiate agents, or imply an approved game feature.
 
 ## Mission
 Test evidence-based coordination among ChatGPT (scope and adjudication), Hermes (bounded implementation candidate), and Herald / Meta Muse Code (independent review), using GitHub as the durable task and evidence record and RDC/Neontic solely for authorized local execution.
