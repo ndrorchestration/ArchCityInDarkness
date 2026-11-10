@@ -37,6 +37,9 @@ def finite_float(value):
     result = float(value)
     if not math.isfinite(result):
         raise ValueError("non-finite JSON number")
+    significand = value.lower().split("e", 1)[0]
+    if result == 0.0 and any(char in "123456789" for char in significand):
+        raise ValueError("JSON number underflows floating point")
     return result
 
 
