@@ -1,0 +1,40 @@
+# ACID-HIP v0.1 proposed policy; documentation only, NOT an enforcement engine.
+version: "0.1"
+project_namespace: ACID-HIP
+reserved_acronym: ACP # Agent Control Plane, not this pilot
+status: draft_not_active
+repository: ndrorchestration/ArchCityInDarkness
+mode: supervised
+default: deny
+roles:
+  chatgpt:
+    allowed: [scope_tasks, read_artifacts, assess_evidence, recommend_disposition]
+  hermes:
+    allowed: [read_assigned_scope, edit_isolated_worktree, run_allowlisted_tests, propose_draft_pr]
+  herald:
+    allowed: [read_pinned_diff, run_allowlisted_read_only_checks, submit_review]
+  human:
+    allowed: [authorize_scope, approve_merge, approve_canon_changes, approve_costs]
+requirements:
+  branch_isolation: true
+  exact_commit_provenance: true
+  fail_closed_on_missing_evidence: true
+  independent_review_same_head: true
+  no_automatic_merges: true
+  no_unattended_destructive_commands: true
+  no_blanket_execution_approval: true
+  human_authorization_for_paid_calls: true
+  human_authorization_for_network_and_secret_changes: true
+  native_unreal_evidence_separate_from_source_checks: true
+resource_limits:
+  heavy_local_jobs_concurrent: 1
+  max_cost_usd: 0
+  unattended_execution_enabled: false
+escalation:
+  - missing_agent_runtime
+  - authentication_or_workspace_trust_prompt
+  - scope_conflict
+  - stale_review_head
+  - failed_test
+  - insufficient_disk_or_memory
+  - unexpected_charge
