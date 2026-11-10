@@ -1,6 +1,8 @@
 # ACID-HIP-001 — Interoperability handshake
 
-**Identity:** ACID-HIP-001 (formerly labeled ACP-PILOT-001 in historical handoffs). Not part of the Agent Control Plane (ACP).\n\nStatus: BLOCKED pending Herald runtime discovery and both agents' explicit controlled test authorization.
+**Identity:** ACID-HIP-001 (formerly labeled ACP-PILOT-001 in historical handoffs). Not part of the Agent Control Plane (ACP).
+
+Status: BLOCKED pending Herald runtime discovery and both agents' explicit controlled test authorization.
 This is a planning artifact only, not an instruction to execute automatically.
 
 ## Objective
