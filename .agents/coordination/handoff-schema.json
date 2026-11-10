@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "ACP v0.1 task handoff",
+  "title": "ACID-HIP v0.1 task handoff",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -18,7 +18,7 @@
   "properties": {
     "task_id": {
       "type": "string",
-      "pattern": "^ACP-[A-Z0-9-]+$"
+      "pattern": "^ACID-HIP-[0-9]{3,}$"
     },
     "status": {
       "enum": [
