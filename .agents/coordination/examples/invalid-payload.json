@@ -1,0 +1,42 @@
+{
+  "task_id": "ACID-HIP-001",
+  "objective": "Implement a proposed task handoff schema, valid and invalid examples, and a Python standard-library offline validator. This fixture is not execution authorization or review evidence.",
+  "owner": "Hermes",
+  "base_sha": "main",
+  "allowed_paths": [
+    "Source/"
+  ],
+  "forbidden_actions": [
+    "working on main",
+    "merging",
+    "gameplay source",
+    "GitHub settings",
+    "secrets",
+    "workflows",
+    "third-party assets",
+    "canon changes",
+    "--yolo or any blanket approval",
+    "paid API calls",
+    "package installation",
+    "entering or requesting credentials",
+    "force-killing any process",
+    "touching any other repository",
+    "modifying Herald review artifacts"
+  ],
+  "acceptance_checks": [
+    "Use a fresh isolated implementation worktree and branch; independent Herald review must bind the submitted head SHA.",
+    "Capture task ID, base/head SHA, allowed paths, commands, exit codes, outputs, and unresolved failures in an evidence manifest.",
+    "The valid example exits 0 and the invalid example exits nonzero without installing packages.",
+    "Commit the candidate; attempt push and draft PR only with existing credentials, otherwise preserve a format-patch and report BLOCKED.",
+    "No autonomous merge, external charge, destructive command, or canon change.",
+    "Missing runtime, authentication, test, or independent review evidence leaves the pilot BLOCKED."
+  ],
+  "dependencies": [
+    "git",
+    "python"
+  ],
+  "budget_caps": {
+    "max_cost_usd": 1
+  },
+  "reviewer": "Herald"
+}
