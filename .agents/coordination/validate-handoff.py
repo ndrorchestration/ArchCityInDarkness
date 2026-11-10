@@ -22,6 +22,8 @@ def safe_pilot_path(value):
         return False
     if "\\" in value or ":" in value or value.startswith("/") or "\x00" in value:
         return False
+    if value == ALLOWED_PREFIX:
+        return True
     if not value.startswith(ALLOWED_PREFIX):
         return False
     # Reject traversal, . segments, duplicate separators and inconsistent normalization.
