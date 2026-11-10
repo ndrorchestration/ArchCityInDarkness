@@ -1,5 +1,5 @@
-# ACP v0.1 proposed policy; documentation only, NOT an enforcement engine.
-version: "0.1"
+# ACID-HIP v0.1 proposed policy; documentation only, NOT an enforcement engine.
+version: "0.1"\nproject_namespace: ACID-HIP\nreserved_acronym: ACP # Agent Control Plane, not this pilot
 status: draft_not_active
 repository: ndrorchestration/ArchCityInDarkness
 mode: supervised
