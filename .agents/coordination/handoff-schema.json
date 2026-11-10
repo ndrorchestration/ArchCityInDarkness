@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "ACID-HIP v0.1 task handoff",
+  "title": "ACID-HIP v0.2 supervised handoff (pilot policy subset)",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -59,7 +59,8 @@
       "uniqueItems": true,
       "items": {
         "type": "string",
-        "minLength": 1
+        "minLength": 1,
+        "pattern": "^(?:\\.agents/coordination/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]*$"
       }
     },
     "objective": {
@@ -101,5 +102,6 @@
         }
       }
     }
-  }
+  },
+  "description": "Pilot data contract, not a capability sandbox or a complete JSON Schema policy engine."
 }
