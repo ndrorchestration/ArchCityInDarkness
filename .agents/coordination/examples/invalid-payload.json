@@ -1,0 +1,12 @@
+{
+  "task_id": "ACID-HIP-001",
+  "status": "DONE",
+  "owner": "Hermes",
+  "reviewer": "Herald",
+  "repository": "ndrorchestration/ArchCityInDarkness",
+  "base_sha": "not-a-sha",
+  "allowed_paths": [],
+  "objective": "",
+  "acceptance_criteria": [],
+  "max_cost_usd": -1
+}

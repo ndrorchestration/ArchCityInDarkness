@@ -1,0 +1,18 @@
+{
+  "task_id": "ACID-HIP-001",
+  "status": "TODO",
+  "owner": "Hermes",
+  "reviewer": "Herald",
+  "repository": "ndrorchestration/ArchCityInDarkness",
+  "base_sha": "562db5e6fb370fab6d327bd50a3e7b4e146bd8a9",
+  "allowed_paths": [
+    ".agents/coordination/"
+  ],
+  "objective": "Validate supervised handoff schema offline",
+  "acceptance_criteria": [
+    "Valid fixture exits 0",
+    "Invalid fixture exits nonzero"
+  ],
+  "max_cost_usd": 0,
+  "evidence": []
+}
