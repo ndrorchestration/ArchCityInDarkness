@@ -1,4 +1,4 @@
-"""ACP v0.1 offline subset validator; Python standard library only.
+"""ACID-HIP v0.1 offline subset validator; Python standard library only.
 Validates the specific schema constraints used by the handoff fixture.
 This is NOT a general-purpose JSON Schema implementation.
 Usage: python validate-handoff.py schema.json payload.json
@@ -86,7 +86,7 @@ def main():
         print("FAIL:", err)
     if errs:
         return 1
-    print("PASS: ACP handoff subset constraints validated")
+    print("PASS: ACID-HIP handoff subset constraints validated")
     return 0
 
 if __name__ == "__main__":
